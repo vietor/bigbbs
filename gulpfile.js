@@ -52,19 +52,15 @@ gulp.task('bower', function() {
         }))
         .pipe(gulp.dest(paths.static + '/js'));
 
-    gulp.src(paths.bower + '/markdown/lib/markdown.js*')
-        .pipe(uglify())
-        .pipe(rename({
-            suffix: '.min'
-        }))
+    gulp.src(paths.bower + '/marked/marked.min.js')
         .pipe(gulp.dest(paths.static + '/js'));
 });
 
 gulp.task('css', function() {
     sass(paths.sass + '/style.scss', {
-        style: 'compressed',
-        loadPath: [paths.sass]
-    })
+            style: 'compressed',
+            loadPath: [paths.sass]
+        })
         .pipe(rename({
             suffix: '.min'
         }))

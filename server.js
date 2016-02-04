@@ -5,7 +5,7 @@ bigcluster(config.cpu, function() {
     var util = require('util');
     var path = require('path');
     var swig = require('swig'),
-        extras = require('swig-extras'),
+        marked = require('marked'),
         bigrest = require('bigrest'),
         csrf = require('csurf'),
         connredis = require('connect-redis');
@@ -92,7 +92,12 @@ bigcluster(config.cpu, function() {
             arr.push(i);
         return arr;
     });
-    extras.useFilter(swig, 'markdown');
+
+    function markdown(context) {
+        return marked(context);
+    }
+    markdown.safe = true;
+    swig.setFilter('markdown', markdown);
 
     bigrest.listen(port, opts, bind, function() {
         console.info("Starting on %s:%d ...", bind, port);
