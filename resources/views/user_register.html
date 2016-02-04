@@ -1,0 +1,53 @@
+{% extends '_layout.html' %}
+
+{% block jsinit %}
+<script src="/js/validator.min.js"></script>
+{% endblock %}
+
+{% block body %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">注册用户</h3>
+  </div>
+  <div class="panel-body">
+    <form accept-charset="UTF-8" action="/user/register" class="form-horizontal" method="post" data-toggle="validator" role="form">
+      <input type="hidden" name="_csrf" value="{{csrf}}"/>
+      <div class="form-group">
+	<label class="col-sm-3 control-label" for="user_nickname">用户名</label>
+	<div class="col-sm-5">
+	  <input class="form-control" id="user_nickname" name="username" type="text" pattern="^[a-zA-Z0-9]{6,32}$" required />
+          <span class="help-block">只能包含6-32位长度的大小写字母及数字</span>
+	</div>
+      </div>
+      <div class="form-group">
+	<label class="col-sm-3 control-label" for="user_email">电子邮件</label>
+	<div class="col-sm-5">
+	  <input class="form-control" id="user_email" name="email" type="text" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" maxlength="50" required />
+	  <span class="help-block">需要50位长度以内有效的邮箱地址</span>
+	</div>
+      </div>
+      <div class="form-group">
+	<label class="col-sm-3 control-label" for="user_password">密码</label>
+	<div class="col-sm-5">
+	  <input class="form-control" id="user_password" name="password" type="password" data-minlength="8" maxlength="18" required/>
+	  <span class="help-block">长度为8-18位</span>
+	</div>
+      </div>
+      <div class="form-group">
+	<label class="col-sm-3 control-label" for="user_password_confirmation">密码确认</label>
+	<div class="col-sm-5">
+	  <input class="form-control" id="user_password_confirmation" name="password_confirm" type="password" data-minlength="8" maxlength="18" data-match="#user_password" required/>
+          <span class="help-block"></span>
+	</div>
+      </div>
+      <div class="form-group">
+	<div class="col-sm-offset-4 col-sm-9">
+	  <button type="submit" name="commit" class="btn btn-primary">注册</button>
+	</div>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

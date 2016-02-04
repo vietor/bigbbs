@@ -1,0 +1,60 @@
+{% set navbar='topic_create' %}
+
+{% extends '_layout.html' %}
+
+{% block cssinit %}
+<link rel="stylesheet" href="/css/bootstrap-markdown.min.css">
+{% endblock %}
+
+{% block jsinit %}
+<script src="/js/markdown.min.js"></script>
+<script src="/js/bootstrap-markdown.min.js"></script>
+<script src="/js/bootstrap-markdown.zh.min.js"></script>
+<script src="/js/validator.min.js"></script>
+{% endblock %}
+
+
+{% block body %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">创建新主题</h3>
+  </div>
+  <div class="panel-body">
+    <form accept-charset="UTF-8" action="/topic/create" id="new_topic" method="post" data-toggle="validator" role="form">
+      <input type="hidden" name="_csrf" value="{{csrf}}"/>
+      <div class="form-group">
+        <label for="title">标题</label>
+        <input class="form-control" id="topic_title" name="title" type="text" data-minlength="2" maxlength="128" required/>
+        <span class="help-block">标题长度需2-128个字符</span>
+      </div>
+      <div class="form-group">
+        <label for="node_id">节点</label>
+	<select name="node_id" id="node_id" class="form-control" required>
+	  <option selected="selected" value="">请选择分类</option>
+          {% for node_group in node_groups %}
+          <optgroup label="&nbsp;&nbsp;{{node_group.name}}">
+            {% for node in node_group.nodes %}
+            <option value="{{node.id}}" {% if node_id == node.id %} selected {% endif %}>{{node.name}}</option>
+            {% endfor %}
+          </optgroup>
+          {% endfor %}
+	</select>
+	<span class="help-block"></span>
+      </div>
+      <div class="form-group">
+        <textarea class="form-control" id="post_content" name="content" rows="15" data-provide="markdown" data-language="zh" data-minlength="2" maxlength="1048576" required></textarea>
+	<span class="help-block"></span>
+      </div>
+      <button type="submit" class="btn btn-primary">创建</button>
+    </form>
+  </div>
+  <div class="panel-footer"></div>
+</div>
+
+{% endblock %}
+
+{% block sidebar %}
+{% include '_sidebar_score.html' %}
+{% include '_sidebar_normal.html' %}
+{% endblock %}

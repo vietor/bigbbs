@@ -1,0 +1,8 @@
+.DS_Store
+/G*
+/.aproject
+/.sass-cache
+/webroot
+/config
+/node_modules
+/bower_components

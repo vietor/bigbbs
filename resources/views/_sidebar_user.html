@@ -1,0 +1,38 @@
+<div class="panel">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-3">
+        <a href="/u/{{current_user.id}}"><img alt="avatar" class="img-rounded avatar-normal" src="{{current_user.avatar|avatar}}" /></a>
+      </div>
+      <div class="col-md-9">
+	<ul class="list-unstyled">
+	  <li><h4>{{current_user.username}}</h4></li>
+          <li><h5 class="text-muted">注册时间:&nbsp;{{current_user.create_date|tsbeforetext}}</li>
+	</ul>
+      </div>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col-md-6">
+      <p><h5 class="text-warning">话题</h5></p>
+      <p><h5 class="text-success">{{current_user.topic_count}}</h5></p>
+    </div>
+    <div class="col-md-6">
+      <p><h5 class="text-warning">积分</h5></p>
+      <p><h5 class="text-success">{{current_user.score}}</h5></p>
+    </div>
+  </div>
+  <div class="panel-footer">
+    <form accept-charset="UTF-8" action="/user/active" method="post">
+      <input type="hidden" name="_csrf" value="{{csrf}}"/>
+      <div class="row">
+        <div class="col-md-3">
+          <button type="submit" name="upload" class="btn btn-success" {% if not can_active %}disabled{% endif %} >每日签到</button>
+        </div>
+        <div class="col-md-9">
+          <h4 class="text-muted">{% if current_user.active_date > 0 %}上次签到: {{current_user.active_date|tsbeforetext}}{% else %}从未签到{% endif %}</h4>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

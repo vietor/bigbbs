@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{{webapp.title}}</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    {% block cssinit %}{% endblock %}
+    <link rel="stylesheet" href="/css/style.min.css">
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">{{webapp.title}}</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            {% if not login_user %}
+            <li><a href="/user/register">加入</a></li>
+            <li><a href="/user/login">进入</a></li>
+            {% else %}
+            <li {% if navbar == 'topic_create' %} class="active" {% endif %}><a href="/topic/create">发表</a></li>
+            <li {% if navbar == 'user_recent' %} class="active" {% endif %}><a href="/u/{{login_user.id}}/recent">过往</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class='glyphicon glyphicon-user'></span> {{login_user.username}} <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/u/{{login_user.id}}">个人主页</a></li>
+                <li><a href="/user/settings">账号信息</a></li>
+                <li class="divider"></li>
+                <li><a href="/user/logout">退出</a></li>
+              </ul>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="row">
+        {% block container %}
+        <div class="col-md-8">
+          {% block body %}
+          {% endblock %}
+        </div>
+        <div class="col-md-4">
+          <div class="hidden-xs hidden-sm">
+            {% block sidebar %}
+            {% include "_sidebar_normal.html" %}
+            {% endblock %}
+          </div>
+        </div>
+        {% endblock %}
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="row">
+	  <p class="text-muted">Copyright &#9400; {{webapp.site.name}} 2015-2016 All rights reserved. </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    {% block jsinit %}{% endblock %}
+  </body>
+</html>

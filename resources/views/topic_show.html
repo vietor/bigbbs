@@ -1,0 +1,97 @@
+{% extends '_layout.html' %}
+
+{% block cssinit %}
+<link rel="stylesheet" href="/css/bootstrap-markdown.min.css">
+{% endblock %}
+
+{% block jsinit %}
+<script src="/js/markdown.min.js"></script>
+<script src="/js/bootstrap-markdown.min.js"></script>
+<script src="/js/bootstrap-markdown.zh.min.js"></script>
+<script src="/js/validator.min.js"></script>
+{% endblock %}
+
+{% block body %}
+
+<div class="panel">
+  <div class="panel-heading topic-detail-heading">
+    <div class="pull-right"><a href="/u/{{topic.creator.id}}"><img class="img-rounded avatar-normal" src="{{topic.creator.avatar|avatar}}" alt="avatar"></a></div>
+    <p><a href="/">首页</a> / <a href="/node/{{topic.node.id}}">{{topic.node.name}}</a></p>
+    <p class="panel-title">{{topic.title}}</p>
+    <p class="text-muted">
+      <span><a href="/u/{{topic.creator.id}}">{{topic.creator.username}}</a></span>&nbsp;•&nbsp;
+      <span>{{topic.create_date|tsbeforetext}}</span>
+    </p>
+  </div>
+  <div class="panel-body markdown-fixed">
+    {{topic.content|markdown}}
+  </div>
+  <div class="panel-footer"></div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h5 class="panel-title">
+      {% if topic.reply_count > 0 %}
+      <span>{{topic.reply_count}}</span><span> 回复 | 直到 {{topic.update_date|tsbeforetext}}</span>
+      {% else %}
+      <span>无回复</span>
+      {% endif %}
+      <a href="#reply_create" class="pull-right"><span class="text-muted">添加回复</span></a>
+    </h5>
+  </div>
+  <div class="panel-body">
+    <ul class="media-list">
+      {% for reply in reply_list %}
+      <li class="media" id="{{reply.index}}">
+        <a class="media-left" href="/u/{{reply.creator.id}}"><img class="img-rounded avatar-small" src="{{reply.creator.avatar|avatar}}" alt="avatar"></a>
+        <div class="media-body">
+          <h5>
+            <span><a href="/u/{{reply.creator.id}}">{{reply.creator.username}}</a>&nbsp;&nbsp;{{reply.create_date|tsbeforetext}}</span>
+            <span class="pull-right">{{reply.index}}楼</span>
+          </h5>
+          <span class="markdown-fixed">{{reply.content|markdown}}</span>
+        </div>
+      </li>
+      {% endfor %}
+  </div>
+  {% if page_count > 1 %}
+  <div class="panel-footer panel-default">
+    <ul class="pagination" style="margin: 0px;">
+      {% for i in page_count|prange %}
+      <li {% if i == page %} class="active" {% endif %}><a href="/t/{{topic.id}}?page={{i}}">{{i}}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+</div>
+<div class="panel panel-default" id="reply_create">
+  <div class="panel-heading">
+    <h4 class="panel-title">回复</h4>
+  </div>
+  <div class="panel-body">
+    {% if not login_user %}
+    <div class="well text-center">
+      <a class="btn btn-default" href="/user/login">登录</a>发表 or 还没有账号？去<a href="/user/register">注册</a>
+    </div>
+    {% else %}
+    <form accept-charset="UTF-8" action="/topic/reply/create" method="post" data-toggle="validator" role="form">
+      <input type="hidden" name="_csrf" value="{{csrf}}"/>
+      <div class="form-group">
+        <input name="topic_id" id="topic_id" type="hidden" value="{{topic.id}}" />
+        <textarea class="form-control" id="post_content" name="content" rows="5" data-provide="markdown" data-language="zh" data-minlength="2" maxlength="1048576" required></textarea>
+	<span class="help-block"></span>
+      </div>
+      <button type="submit" class="btn btn-primary" id="comment-submit">回复</button>
+    </form>
+    {% endif %}
+  </div>
+  <div class="panel-footer"></div>
+</div>
+
+{% endblock %}
+
+
+{% block sidebar %}
+{% include '_sidebar_score.html' %}
+{% include '_sidebar_normal.html' %}
+{% endblock %}

@@ -1,0 +1,250 @@
+{
+    "failure": "request_failure",
+    "interceptor": "request_preprocess",
+    "processors": [
+        {
+            "url": "/user/register",
+            "method": "GET",
+            "processor": "user_register",
+            "workparam": {
+                "unlogined": true
+            }
+        },
+        {
+            "url": "/user/register",
+            "method": "POST",
+            "processor": "user_register_action",
+            "parameters": [
+                {
+                    "name": "username",
+                    "regexp": "^[a-zA-Z0-9]{6,32}$"
+                },
+                {
+                    "name": "email",
+                    "regexp": "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$"
+                },
+                {
+                    "name": "password",
+                    "length_min": 8,
+                    "length_max": 18
+                },
+                {
+                    "name": "password_confirm",
+                    "match": "password"
+                }
+            ],
+            "workparam": {
+                "unlogined": true
+            }
+        },
+        {
+            "url": "/user/login",
+            "method": "GET",
+            "processor": "user_login",
+            "workparam": {
+                "unlogined": true
+            }
+        },
+        {
+            "url": "/user/login",
+            "method": "POST",
+            "processor": "user_login_action",
+            "parameters": [
+                {
+                    "name": "username",
+                    "regexp": "^[a-zA-Z0-9]{6,32}$"
+                },
+                {
+                    "name": "password",
+                    "length_min": 8,
+                    "length_max": 18
+                }
+            ],
+            "workparam": {
+                "unlogined": true
+            }
+        },
+        {
+            "url": "/user/logout",
+            "method": "GET,POST",
+            "processor": "user_logout",
+            "workparam": {
+                "logined": true
+            }
+        },
+        {
+            "url": "/user/findpwd",
+            "method": "GET",
+            "processor": "user_findpwd",
+            "workparam": {
+                "unlogined": true
+            }
+        },
+        {
+            "url": "/user/findpwd",
+            "method": "POST",
+            "processor": "user_findpwd_action",
+            "parameters": [
+                {
+                    "name": "username",
+                    "regexp": "^[a-zA-Z0-9]{6,32}$"
+                },
+                {
+                    "name": "email",
+                    "regexp": "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$"
+                }
+            ],
+            "workparam": {
+                "unlogined": true
+            }
+        },
+        {
+            "url": "/user/resetpwd",
+            "method": "GET",
+            "processor": "user_resetpwd",
+            "parameters": [
+                {
+                    "name": "code",
+                    "regexp": "^[a-f0-9]+$"
+                }
+            ],
+            "workparam": {
+                "unlogined": true
+            }
+        },
+        {
+            "url": "/user/resetpwd",
+            "method": "POST",
+            "processor": "user_resetpwd_action",
+            "parameters": [
+                {
+                    "name": "code",
+                    "regexp": "^[a-f0-9]+$"
+                },
+                {
+                    "name": "newpassword",
+                    "length_min": 8,
+                    "length_max": 18
+                },
+                {
+                    "name": "newpassword_confirm",
+                    "match": "newpassword"
+                }
+            ],
+            "workparam": {
+                "unlogined": true
+            }
+        },
+        {
+            "url": "/u/:id",
+            "method": "GET",
+            "processor": "user_show"
+        },
+        {
+            "url": "/u/:id/recent",
+            "method": "GET",
+            "processor": "user_recent",
+            "parameters": [
+                {
+                    "name": "page",
+                    "default": 1,
+                    "range": [
+                        1,
+                        999
+                    ]
+                }
+            ],
+            "workparam": {
+                "logined": true
+            }
+        },
+        {
+            "url": "/user/settings",
+            "method": "GET",
+            "processor": "user_setting_profile",
+            "workparam": {
+                "logined": true
+            }
+        },
+        {
+            "url": "/user/settings",
+            "method": "POST",
+            "processor": "user_setting_profile_action",
+            "parameters": [
+                {
+                    "name": "email",
+                    "regexp": "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$"
+                },
+                {
+                    "name": "homepage",
+                    "empty": true,
+                    "length_max": 256
+                },
+                {
+                    "name": "signature",
+                    "empty": true,
+                    "length_max": 256
+                }
+            ],
+            "workparam": {
+                "logined": true
+            }
+        },
+        {
+            "url": "/user/settings/avatar",
+            "method": "GET",
+            "processor": "user_setting_avatar",
+            "workparam": {
+                "logined": true
+            }
+        },
+        {
+            "url": "/user/settings/avatar",
+            "method": "POST",
+            "processor": "user_setting_avatar_action",
+            "workparam": {
+                "logined": true
+            }
+        },
+        {
+            "url": "/user/settings/password",
+            "method": "GET",
+            "processor": "user_setting_password",
+            "workparam": {
+                "logined": true
+            }
+        },
+        {
+            "url": "/user/settings/password",
+            "method": "POST",
+            "processor": "user_setting_password_action",
+            "parameters": [
+                {
+                    "name": "password",
+                    "length_min": 8,
+                    "length_max": 18
+                },
+                {
+                    "name": "newpassword",
+                    "length_min": 8,
+                    "length_max": 18
+                },
+                {
+                    "name": "newpassword_confirm",
+                    "match": "newpassword"
+                }
+            ],
+            "workparam": {
+                "logined": true
+            }
+        },
+        {
+            "url": "/user/active",
+            "method": "POST",
+            "processor": "user_active_action",
+            "workparam": {
+                "logined": true
+            }
+        }
+    ]
+}

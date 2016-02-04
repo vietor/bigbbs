@@ -1,0 +1,28 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">节点列表</h3>
+  </div>
+  <div class="panel-body">
+    {% for node_group in webapp.node_groups %}
+    <p><span class="text-muted">{{node_group.name}}</span></p>
+    <p>
+      {% for node in node_group.nodes %}
+      <a href="/node/{{node.id}}">{{node.name}}</a>&nbsp;
+      {% endfor %}
+    </p>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">友情连接</h3>
+  </div>
+  <div class="panel-body">
+    <ul class="list-unstyled">
+      {% for link in webapp.friend_links %}
+      <li><a href="{{link.url}}" target="_blank">{{link.name}}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+{
+    "maxerr": 50,
+    "predef": [
+        "brcx",
+        "brcommons",
+        "brmx",
+        "brmethods",
+        "project_rootdir"
+    ],
+    "undef": true,
+    "unused": true,
+    "noarg": true,
+    "nonbsp": true,
+    "esnext": true,
+    "eqeqeq": false,
+    "eqnull": false,
+    "laxbreak": true,
+    "mocha": true,
+    "node": true
+}

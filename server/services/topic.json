@@ -1,0 +1,83 @@
+{
+    "failure": "request_failure",
+    "interceptor": "request_preprocess",
+    "processors": [
+        {
+            "url": "/t/:id",
+            "method": "GET,POST",
+            "processor": "topic_show",
+            "parameters": [
+                {
+                    "name": "id",
+                    "digit": true
+                },
+                {
+                    "name": "page",
+                    "default": -1,
+                    "range": [
+                        1,
+                        999
+                    ]
+                }
+            ]
+        },
+        {
+            "url": "/topic/create",
+            "method": "GET",
+            "processor": "topic_create",
+            "parameters": [
+                {
+                    "name": "node_id",
+                    "digit": true,
+                    "default": 0
+                }
+            ],
+            "workparam": {
+                "logined": true
+            }
+        },
+        {
+            "url": "/topic/create",
+            "method": "POST",
+            "processor": "topic_create_action",
+            "parameters": [
+                {
+                    "name": "node_id",
+                    "digit": true
+                },
+                {
+                    "name": "title",
+                    "length_min": 2,
+                    "length_max": 128
+                },
+                {
+                    "name": "content",
+                    "length_min": 2,
+                    "length_max": 1048576
+                }
+            ],
+            "workparam": {
+                "logined": true
+            }
+        },
+        {
+            "url": "/topic/reply/create",
+            "method": "POST",
+            "processor": "reply_create_action",
+            "parameters": [
+                {
+                    "name": "topic_id",
+                    "digit": true
+                },
+                {
+                    "name": "content",
+                    "length_min": 2,
+                    "length_max": 1048576
+                }
+            ],
+            "workparam": {
+                "logined": true
+            }
+        }
+    ]
+}

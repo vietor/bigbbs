@@ -1,0 +1,13 @@
+{% extends '_layout.html' %} {% block body %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">最近主题&nbsp;•&nbsp;节点&nbsp;•&nbsp;<span class="text-muted">{{current_node.name}}</span>{% if login_user %}<span class='pull-right'><a href="/topic/create?node_id={{current_node.id}}" class="label label-success">快速发表</a></span>{% endif %}</h3>
+  </div>
+  <div class="panel-body">
+    {% include '_topics.html' %}
+  </div>
+  <div class="panel-footer">{% if page > 1 %}<span><a href="/node/{{current_node.id}}/recent?page={{page-1}}" id="getmore">上一页</a></span>{% endif %}&nbsp;{% if has_next %}<span class='pull-right'><a href="/node/{{current_node.id}}/recent?page={{page+1}}" id="getmore">下一页</a></span>{% endif %}</div>
+</div>
+
+{% endblock %}

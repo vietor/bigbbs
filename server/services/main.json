@@ -1,0 +1,46 @@
+{
+    "failure": "request_failure",
+    "interceptor": "request_preprocess",
+    "processors": [
+        {
+            "url": "/",
+            "method": "GET,POST",
+            "processor": "home"
+        },
+        {
+            "url": "/recent",
+            "method": "GET,POST",
+            "processor": "home_recent",
+            "parameters": [
+                {
+                    "name": "page",
+                    "default": 1,
+                    "range": [
+                        1,
+                        999
+                    ]
+                }
+            ]
+        },
+        {
+            "url": "/node/:id",
+            "method": "GET,POST",
+            "processor": "node"
+        },
+        {
+            "url": "/node/:id/recent",
+            "method": "GET,POST",
+            "processor": "node_recent",
+            "parameters": [
+                {
+                    "name": "page",
+                    "default": 1,
+                    "range": [
+                        1,
+                        999
+                    ]
+                }
+            ]
+        }
+    ]
+}
