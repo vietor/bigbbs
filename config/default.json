@@ -1,0 +1,100 @@
+{
+    "cpu": -1,
+    "debug": true,
+    "bind": "",
+    "port": 4000,
+    "store": {
+        "pg": {
+            "host": "127.0.0.1",
+            "port": 5432,
+            "database": "forum1",
+            "user": "vietor",
+            "password": ""
+        },
+        "redis": {
+            "host": "127.0.0.1",
+            "port": 6379
+        },
+        "session": {
+            "secret": "froum-safe-key",
+            "redis": {
+                "host": "127.0.0.1",
+                "port": 6379
+            }
+        },
+        "safekey": "resetpwd-safe-key",
+        "avatar": {
+            "type": "LOCAL",
+            "LOCAL": {
+                "url": "web path",
+                "path": "store file path"
+            }
+        }
+    },
+    "limits": {
+        "rate_of_create": 5,
+        "topic_pagesize": 30,
+        "reply_pagesize": 100,
+        "user_show_topics": 10,
+        "second_of_findpwd": 600,
+        "score": {
+            "user_active": 100,
+            "user_create": 150,
+            "topic_create": 25,
+            "reply_create": 15,
+            "reply_reward": 10
+        }
+    },
+    "mailto": {
+        "server": {
+            "host": "smtp-server",
+            "auth": {
+                "user": "smtp-user",
+                "pass": "smtp-password"
+            }
+        },
+        "from": "Name <mailer>"
+    },
+    "webapp": {
+        "title": "这里是标题",
+        "site": {
+            "name": "站点名",
+            "home_url": "http://127.0.0.1:4000",
+            "resetpwd_url": "http://127.0.0.1:4000/user/resetpwd"
+        },
+        "node_groups": [
+            {
+                "name": "节点分组1",
+                "nodes": [
+                    {
+                        "id": 1,
+                        "name": "节点1"
+                    },
+                    {
+                        "id": 2,
+                        "name": "节点2"
+                    }
+                ]
+            },
+            {
+                "name": "节点分组2",
+                "nodes": [
+                    {
+                        "id": 3,
+                        "name": "节点3"
+                    },
+                    {
+                        "id": 4,
+                        "name": "节点4"
+                    }
+                ]
+            }
+        ],
+        "friend_links": [
+            {
+                "name": "Roteiv's Blog",
+                "url": "http://roteiv.com"
+            }
+        ]
+    }
+}
