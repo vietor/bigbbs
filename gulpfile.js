@@ -3,6 +3,7 @@ var gulp = require('gulp'),
     bower = require('gulp-bower'),
     rename = require('gulp-rename'),
     uglify = require('gulp-uglify'),
+    minify = require('gulp-minify-css'),
     expressService = require('gulp-express-service');
 
 var paths = {
@@ -54,6 +55,16 @@ gulp.task('bower', function() {
 
     gulp.src(paths.bower + '/marked/marked.min.js')
         .pipe(gulp.dest(paths.static + '/js'));
+
+    gulp.src(paths.bower + '/highlightjs/highlight.pack.min.js')
+        .pipe(gulp.dest(paths.static + '/js'));
+    gulp.src(paths.bower + '/highlightjs/styles/monokai.css')
+        .pipe(minify())
+        .pipe(rename({
+            prefix: 'highlight-',
+            suffix: '.min'
+        }))
+        .pipe(gulp.dest(paths.static + '/css'));
 });
 
 gulp.task('css', function() {
