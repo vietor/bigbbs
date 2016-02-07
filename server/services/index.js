@@ -10,6 +10,7 @@ exports.request_preprocess = function(req, res) {
     var logined = req.session && req.session.login_user;
     if (req.workparam.logined && !logined) {
         res.render("alter.html", {
+            location: "/",
             message: "登陆用户才能操作"
         });
         return false;

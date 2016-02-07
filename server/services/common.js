@@ -60,7 +60,7 @@ exports.login_user_detail = function(req, res, template, variables) {
         else
             res.render(template, _.extend(variables, {
                 current_user: user,
-                can_active: user.active_date + brcx.SECONDS_OF_DAY < brcx.getTimestamp()
+                can_active: brcx.isActiveAble(user.active_date)
             }));
     });
 };

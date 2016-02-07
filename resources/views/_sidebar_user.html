@@ -27,10 +27,10 @@
       <input type="hidden" name="_csrf" value="{{csrf}}"/>
       <div class="row">
         <div class="col-md-3">
-          <button type="submit" name="upload" class="btn btn-success" {% if not can_active %}disabled{% endif %} >每日签到</button>
+          <button type="submit" name="upload" class="btn btn-success" {% if not can_active %}disabled{% endif %} >{% if can_active %}每日{% else %}已经{% endif %}签到</button>
         </div>
         <div class="col-md-9">
-          <h4 class="text-muted">{% if current_user.active_date > 0 %}上次签到: {{current_user.active_date|tsbeforetext}}{% else %}从未签到{% endif %}</h4>
+          <h4 class="text-muted">{% if current_user.active_date > 0 %}{{current_user.active_date|tsbeforetext}},持续{{current_user.active_days}}天{% else %}从未签到{% endif %}</h4>
         </div>
       </div>
     </form>

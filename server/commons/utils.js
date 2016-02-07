@@ -1,8 +1,6 @@
 var crypto = require('crypto');
 var config = require('config');
 
-exports.SECONDS_OF_DAY = 24 * 3600;
-
 exports.md5 = function(text) {
     var hash = crypto.createHash('md5');
     hash.update(text);

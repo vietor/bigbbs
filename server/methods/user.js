@@ -267,11 +267,11 @@ exports.user_active = function(id, callback) {
         },
         function(user, nextcall) {
             var timestamp = brcx.getTimestamp();
-            if (user.active_date + brcx.SECONDS_OF_DAY > timestamp)
+            if (!brcx.isActiveAble(user.active_date))
                 nextcall(null);
             else {
                 var days = 1;
-                if (timestamp - user.active_date < 2 * brcx.SECONDS_OF_DAY)
+                if (timestamp - user.active_date < brcx.ACTIVE_INTERVAL)
                     days = user.active_days + 1;
                 brcx.execSQL("UPDATE users SET active_date=$1, active_days=$2, score=score+$3 WHERE id=$4", [
                     timestamp, days, config.limits.score.user_active, id

@@ -5,14 +5,23 @@
     <title>提示信息</title>
     <link href="/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" />
     <style type="text/css">
-      #container {
-      width:600px;
-      margin: 10px auto;
-      padding: 20px;
-      border: 1px solid #D0D0D0;
-      -webkit-box-shadow: 0 0 8px #D0D0D0;
-      }
+    #container {
+    	width:600px;
+    	margin: 10px auto;
+    	padding: 20px;
+    	border: 1px solid #D0D0D0;
+    	-webkit-box-shadow: 0 0 8px #D0D0D0;
+    }
     </style>
+    <script>
+      function do_action() {
+      {% if location %}
+      	window.location = {{location}};
+      {% else %}
+      	history.back();
+      {% endif %}
+      }
+    </script>
   </head>
   <body>
     <div id="container">
@@ -21,9 +30,9 @@
 	{{message}}
       </div>
       <p>
-	<a href="javascript:history.back();" class="alert-link">如果您的浏览器没有自动跳转，请点击这里</a>
+	<a href="javascript:do_action();" class="alert-link">如果您的浏览器没有自动跳转，请点击这里</a>
 	<script language="javascript">
-          setTimeout(function(){history.back();}, 3600);
+          setTimeout(do_action, 3600);
         </script>
       </p>
     </div>

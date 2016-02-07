@@ -1,5 +1,15 @@
 var _ = require('underscore');
 
+var SECONDS_OF_DAY = 24 * 3600;
+
+exports.ACTIVE_INTERVAL = SECONDS_OF_DAY * 2;
+
+exports.isActiveAble = function(active_date, timestamp) {
+    if (!timestamp)
+        timestamp = brcx.getTimestamp();
+    return parseInt(active_date) + SECONDS_OF_DAY < timestamp;
+};
+
 function findUser(key, value, callback) {
     brcx.execSQL("SELECT * FROM users WHERE " + key + "=$1", [value], function(err, rows) {
         if (err)
