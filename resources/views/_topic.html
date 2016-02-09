@@ -1,0 +1,27 @@
+{% extends '_layout.html' %}
+
+{% block cssinit %}
+<link rel="stylesheet" href="/css/bootstrap-markdown.min.css">
+<link rel="stylesheet" href="/css/highlight-monokai.min.css">
+{% endblock %}
+
+{% block jsinit %}
+<script src="/js/marked.min.js"></script>
+<script src="/js/highlight.pack.min.js"></script>
+<script src="/js/bootstrap-markdown.min.js"></script>
+<script src="/js/bootstrap-markdown.zh.min.js"></script>
+<script src="/js/validator.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+
+    var renderer = new marked.Renderer();
+    renderer.code = function(code, language) {
+        return '<pre><code class="hljs ' + language + '">' +
+            hljs.highlight(language, code).value +
+            '</code></pre>';
+    };
+    marked.setOptions({
+        renderer: renderer
+    });
+</script>
+{% endblock %}
