@@ -1,4 +1,5 @@
 var gulp = require('gulp'),
+    zip = require('gulp-zip'),
     sass = require('gulp-ruby-sass'),
     bower = require('gulp-bower'),
     rename = require('gulp-rename'),
@@ -14,11 +15,11 @@ var paths = {
 };
 
 gulp.task('bower', function() {
-    bower()
+    return bower()
         .pipe(gulp.dest(paths.bower));
+});
 
-    gulp.src(paths.images + '/*')
-        .pipe(gulp.dest(paths.static + '/images'));
+gulp.task('bower-copy', ['bower'], function() {
 
     gulp.src(paths.bower + '/jquery/jquery.min.*')
         .pipe(gulp.dest(paths.static + '/js'));
@@ -67,6 +68,11 @@ gulp.task('bower', function() {
         .pipe(gulp.dest(paths.static + '/css'));
 });
 
+gulp.task('images', function() {
+    gulp.src(paths.images + '/*')
+        .pipe(gulp.dest(paths.static + '/images'));
+});
+
 gulp.task('css', function() {
     sass(paths.sass + '/style.scss', {
             style: 'compressed',
@@ -78,7 +84,7 @@ gulp.task('css', function() {
         .pipe(gulp.dest(paths.static + '/css'));
 });
 
-gulp.task('service', function() {
+gulp.task('service', ['bower-copy'], function() {
     gulp.src(['./server.js'])
         .pipe(expressService({
             file: './server.js'
@@ -89,9 +95,18 @@ gulp.task('service', function() {
 });
 
 
-gulp.task('watch', function() {
+gulp.task('watch', ['service'], function() {
     gulp.watch(paths.sass + '/**/*.scss', ['css']);
     gulp.watch(['./server.js', './server/**/*.js', './server/**/*.json'], ['service']);
 });
 
-gulp.task('default', ['bower', 'css', 'service', 'watch']);
+gulp.task('zip', ['bower-copy', 'images', 'css'], function() {
+    gulp.src(['./server.js', './package.json', './server/**', './resources/**', './webroot/**', './node_modules/**', './config/**', '!./config/local.json'], {
+            base: '.'
+        })
+        .pipe(zip('archive.zip'))
+        .pipe(gulp.dest('./'));
+});
+
+gulp.task('archive', ['bower', 'bower-copy', 'images', 'css', 'zip']);
+gulp.task('default', ['bower', 'bower-copy', 'images', 'css', 'service', 'watch']);
