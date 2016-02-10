@@ -101,7 +101,16 @@ gulp.task('watch', ['service'], function() {
 });
 
 gulp.task('zip', ['bower-copy', 'images', 'css'], function() {
-    gulp.src(['./server.js', './package.json', './server/**', './resources/**', './webroot/**', './node_modules/**', './config/**', '!./config/local.json'], {
+    gulp.src([
+            './server.js',
+            './package.json',
+            './server/**',
+            './resources/mail/**',
+            './resources/views/**',
+            './webroot/**',
+            './node_modules/**',
+            './config/**', '!./config/local.json'
+        ], {
             base: '.'
         })
         .pipe(zip('archive.zip'))
