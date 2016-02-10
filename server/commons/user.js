@@ -4,6 +4,9 @@ var SECONDS_OF_DAY = 24 * 3600;
 
 exports.ACTIVE_INTERVAL = SECONDS_OF_DAY * 2;
 
+exports.ROLE_NORMAL = 0;
+exports.ROLE_MANAGER = 1;
+
 exports.isActiveAble = function(active_date, timestamp) {
     if (!timestamp)
         timestamp = brcx.getTimestamp();

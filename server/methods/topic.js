@@ -145,6 +145,39 @@ exports.topic_list = function(node_id, otype, offset, limit, callback) {
     ], callback);
 };
 
+exports.topic_move = function(user_id, topic_id, node_id, callback) {
+    async.waterfall([
+        function(nextcall) {
+            var node = brcx.findNode(node_id);
+            if (!node)
+                nextcall(brcx.errNotFoundNode());
+            else
+                nextcall(null);
+        },
+        function(nextcall) {
+            findTopicById(topic_id, function(err, topic) {
+                if (err)
+                    nextcall(err);
+                else
+                    nextcall(null, topic);
+            });
+        },
+        function(topic, nextcall) {
+            if (topic.node_id == node_id)
+                nextcall(null, topic_id);
+            else
+                brcx.execSQL("UPDATE topics SET node_id=$1 WHERE id=$2", [
+                    node_id, topic_id
+                ], function(err) {
+                    if (err)
+                        nextcall(err);
+                    else
+                        nextcall(null, topic_id);
+                });
+        }
+    ], callback);
+};
+
 exports.reply_create = function(user_id, topic_id, content, callback) {
     var timestamp = brcx.getTimestamp();
     var score = config.limits.score.reply_create;

@@ -26,6 +26,7 @@ exports.user_login_action = function(req, res) {
         else {
             req.session.login_user = {
                 id: user.id,
+                role: user.role,
                 username: user.username
             };
             res.redirect("/");

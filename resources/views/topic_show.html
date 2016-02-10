@@ -15,7 +15,30 @@
   <div class="panel-body markdown-fixed">
     {{topic.content|markdown}}
   </div>
-  <div class="panel-footer"></div>
+  <div class="panel-footer clearfix">
+    {% if login_user && login_user.role > 0 %}
+    <span class="pull-right">
+      <form class="form-inline" accept-charset="UTF-8" action="/topic/move" method="post" data-toggle="validator" role="form">
+        <input type="hidden" name="_csrf" value="{{csrf}}"/>
+        <input name="topic_id" id="topic_id" type="hidden" value="{{topic.id}}" />
+        <div class="form-group">
+          <label for="node_id">节点</label>
+          <select name="node_id" id="node_id" class="form-control" required>
+            <option selected="selected" value="">请选择分类</option>
+            {% for node_group in node_groups %}
+            <optgroup label="&nbsp;&nbsp;{{node_group.name}}">
+              {% for node in node_group.nodes %}
+              <option value="{{node.id}}" {% if topic.node.id == node.id %} selected {% endif %}>{{node.name}}</option>
+              {% endfor %}
+            </optgroup>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">移动</button>
+      </form>
+    </span>
+    {% endif %}
+  </div>
 </div>
 <div class="panel panel-default">
   <div class="panel-heading">

@@ -24,6 +24,15 @@ exports.topic_create_action = function(req, res) {
     });
 };
 
+exports.topic_move_action = function(req, res) {
+    brmx.topic_move(req.session.login_user.id, parseInt(req.param('topic_id')), parseInt(req.param('node_id')), function(err, topic_id) {
+        if (err)
+            common.sendAlter(res, err);
+        else
+            res.redirect('/t/' + topic_id);
+    });
+};
+
 exports.reply_create_action = function(req, res) {
     brmx.reply_create(req.session.login_user.id, parseInt(req.param('topic_id')), req.param('content'), function(err, topic_id) {
         if (err)
@@ -47,7 +56,8 @@ exports.topic_show = function(req, res) {
                     });
                 }),
                 page: page,
-                page_count: page_count
+                page_count: page_count,
+                node_groups: brcx.getNodeGroups()
             });
         }
     });

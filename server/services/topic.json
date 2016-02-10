@@ -61,6 +61,25 @@
             }
         },
         {
+            "url": "/topic/move",
+            "method": "POST",
+            "processor": "topic_move_action",
+            "parameters": [
+                {
+                    "name": "topic_id",
+                    "digit": true
+                },
+                {
+                    "name": "node_id",
+                    "digit": true
+                }
+            ],
+            "workparam": {
+                "role": 1,
+                "logined": true
+            }
+        },
+        {
             "url": "/topic/reply/create",
             "method": "POST",
             "processor": "reply_create_action",

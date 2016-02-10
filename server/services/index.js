@@ -21,8 +21,15 @@ exports.request_preprocess = function(req, res) {
         });
         return false;
     }
-    if (logined)
+    if (logined) {
+        if (req.workparam.role && req.session.login_user.role < req.workparam.role) {
+            res.render("alter.html", {
+                message: "当前用户角色无法操作"
+            });
+            return false;
+        }
         res.locals.login_user = req.session.login_user;
+    }
 
     res.locals.csrf = req.csrfToken();
     res.locals.score = config.limits.score;
