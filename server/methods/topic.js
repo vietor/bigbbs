@@ -109,6 +109,8 @@ exports.topic_list = function(node_id, otype, offset, limit, callback) {
             if (node_id) {
                 sql += " WHERE node_id=$1";
                 params.push(node_id);
+            } else {
+                sql += " WHERE node_id>0";
             }
             sql += " ORDER BY";
             if (otype == brcx.TOPIC_OTYPE_CREATE)

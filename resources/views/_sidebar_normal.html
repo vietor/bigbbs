@@ -1,6 +1,6 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">节点列表</h3>
+    <h3 class="panel-title">节点列表{% if login_user && login_user.role>0 %}<span class="pull-right"><a href="/node/{{webapp.node_trash.id}}">{{webapp.node_trash.name}}</a></span>{% endif %}</h3>
   </div>
   <div class="panel-body">
     {% for node_group in webapp.node_groups %}

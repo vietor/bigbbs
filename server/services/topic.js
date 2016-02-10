@@ -10,8 +10,7 @@ function dumpReplyDetail(data, user_map) {
 
 exports.topic_create = function(req, res) {
     common.login_user_detail(req, res, 'topic_create.html', {
-        node_id: parseInt(req.param('node_id')),
-        node_groups: brcx.getNodeGroups()
+        node_id: parseInt(req.param('node_id'))
     });
 };
 
@@ -56,8 +55,7 @@ exports.topic_show = function(req, res) {
                     });
                 }),
                 page: page,
-                page_count: page_count,
-                node_groups: brcx.getNodeGroups()
+                page_count: page_count
             });
         }
     });

@@ -20,7 +20,7 @@
         <label for="node_id">节点</label>
 	<select name="node_id" id="node_id" class="form-control" required>
 	  <option selected="selected" value="">请选择分类</option>
-          {% for node_group in node_groups %}
+          {% for node_group in webapp.node_groups %}
           <optgroup label="&nbsp;&nbsp;{{node_group.name}}">
             {% for node in node_group.nodes %}
             <option value="{{node.id}}" {% if node_id == node.id %} selected {% endif %}>{{node.name}}</option>

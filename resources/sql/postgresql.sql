@@ -55,6 +55,12 @@ CREATE TABLE topics
 CREATE INDEX "IX_topics_user_create" ON topics
 USING btree (user_id, create_date DESC);
 
+CREATE INDEX "IX_topics_node_create" ON topics
+USING btree (node_id, create_date DESC);
+
+CREATE INDEX "IX_topics_node_update" ON topics
+USING btree (node_id, update_date DESC);
+
 
 
 CREATE TABLE replies

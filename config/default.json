@@ -62,6 +62,10 @@
             "home_url": "http://127.0.0.1:4000",
             "resetpwd_url": "http://127.0.0.1:4000/user/resetpwd"
         },
+        "node_trash": {
+            "id": -1,
+            "name": "垃圾节点"
+        },
         "node_groups": [
             {
                 "name": "节点分组1",
