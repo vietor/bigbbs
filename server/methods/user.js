@@ -9,6 +9,17 @@ function mkUKey(username) {
     return brcx.md5(asKey(username));
 }
 
+function findUserAndCheckStatus(id, callback) {
+    brcx.findUserById(id, function(err, user) {
+        if (err)
+            callback(err);
+        else if (!brcx.checkUserStatus(user, brcx.STATUS_NOLOGIN))
+            callback(brcx.errStatusLimited());
+        else
+            callback(null, user);
+    });
+}
+
 exports.user_register = function(username, password, email, callback) {
     async.waterfall([
         function(nextcall) {
@@ -58,20 +69,18 @@ exports.user_register = function(username, password, email, callback) {
 };
 
 exports.user_login = function(username, password, callback) {
-    async.waterfall([
-        function(nextcall) {
-            brcx.findUserByKV('ukey', mkUKey(username), function(err, user) {
-                if (err)
-                    nextcall(err);
-                else if (!user)
-                    nextcall(brcx.errNotFoundUser());
-                else if (user.password != brcx.md5(password))
-                    nextcall(brcx.errInvalidUserOrPwd());
-                else
-                    nextcall(null, user);
-            });
-        }
-    ], callback);
+    brcx.findUserByKV('ukey', mkUKey(username), function(err, user) {
+        if (err)
+            callback(err);
+        else if (!user)
+            callback(brcx.errNotFoundUser());
+        else if (!brcx.checkUserStatus(user, brcx.STATUS_NOLOGIN))
+            callback(brcx.errStatusLimited());
+        else if (user.password != brcx.md5(password))
+            callback(brcx.errInvalidUserOrPwd());
+        else
+            callback(null, user);
+    });
 };
 
 exports.user_detail = function(id, callback) {
@@ -81,7 +90,7 @@ exports.user_detail = function(id, callback) {
 exports.user_setting_profile = function(id, email, homepage, signature, callback) {
     async.waterfall([
         function(nextcall) {
-            brcx.findUserById(id, function(err, user) {
+            findUserAndCheckStatus(id, function(err, user) {
                 if (err)
                     nextcall(err);
                 else
@@ -120,7 +129,7 @@ exports.user_setting_profile = function(id, email, homepage, signature, callback
 exports.user_setting_password = function(id, password, newpassword, callback) {
     async.waterfall([
         function(nextcall) {
-            brcx.findUserById(id, function(err, user) {
+            findUserAndCheckStatus(id, function(err, user) {
                 if (err)
                     nextcall(err);
                 else if (user.password != brcx.md5(password))
@@ -148,7 +157,7 @@ exports.user_setting_password = function(id, password, newpassword, callback) {
 exports.user_setting_avatar = function(id, file, callback) {
     async.waterfall([
         function(nextcall) {
-            brcx.findUserById(id, function(err) {
+            findUserAndCheckStatus(id, function(err) {
                 if (err)
                     nextcall(err);
                 else
@@ -190,6 +199,8 @@ exports.user_findpwd = function(username, email, callback) {
                     nextcall(brcx.errNotFoundUser());
                 else if (user.email != asKey(email))
                     nextcall(brcx.errInvalidEmailOwner());
+                else if (!brcx.checkUserStatus(user, brcx.STATUS_NOLOGIN))
+                    callback(brcx.errStatusLimited());
                 else if (time - user.reset_date < config.limits.second_of_findpwd)
                     nextcall(brcx.errBusyForFindPwd());
                 else
@@ -242,7 +253,7 @@ exports.user_resetpwd = function(code, newpassword, callback) {
             });
         },
         function(user, nextcall) {
-            brcx.execSQL("UPDATE users SET password=$1, reset_code='' WHERE id=$2", [
+            brcx.execSQL("UPDATE users SET password=$1, reset_code=\"\" WHERE id=$2", [
                 brcx.md5(newpassword), user.id
             ], function(err) {
                 if (err)
@@ -282,6 +293,29 @@ exports.user_active = function(id, callback) {
                         nextcall(null);
                 });
             }
+        }
+    ], callback);
+};
+
+exports.user_modify_status = function(id, status, status_expire, callback) {
+    async.waterfall([
+        function(nextcall) {
+            brcx.findUserById(id, function(err, user) {
+                if (err)
+                    nextcall(err);
+                else
+                    nextcall(null, user);
+            });
+        },
+        function(user, nextcall) {
+            brcx.execSQL("UPDATE users SET status=$1, status_expire=$2 WHERE id=$3", [
+                status, status_expire, id
+            ], function(err) {
+                if (err)
+                    nextcall(err);
+                else
+                    nextcall(null, id);
+            });
         }
     ], callback);
 };

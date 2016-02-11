@@ -138,7 +138,13 @@
         {
             "url": "/u/:id",
             "method": "GET",
-            "processor": "user_show"
+            "processor": "user_show",
+            "parameters": [
+                {
+                    "name": "id",
+                    "digit": true
+                }
+            ]
         },
         {
             "url": "/u/:id/recent",
@@ -243,6 +249,28 @@
             "method": "POST",
             "processor": "user_active_action",
             "workparam": {
+                "logined": true
+            }
+        },
+        {
+            "url": "/user/manage/status",
+            "method": "POST",
+            "processor": "user_manage_status_action",
+            "parameters": [
+                {
+                    "name": "user_id",
+                    "digit": true
+                },
+                {
+                    "name": "action",
+                    "range": [
+                        1,
+                        5
+                    ]
+                }
+            ],
+            "workparam": {
+                "role": 1,
                 "logined": true
             }
         }

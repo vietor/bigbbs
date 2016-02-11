@@ -12,6 +12,7 @@ var errors = {
     202008: "错误的安全校验码",
     202009: "找回密码操作过于频繁",
     202010: "账户积分不足",
+    202011: "账户状态受限制",
     203001: "节点不存在",
     203002: "话题不存在",
     203003: "重复操作太频繁"
@@ -75,6 +76,10 @@ exports.errBusyForFindPwd = function() {
 
 exports.errScoreNotEnouth = function() {
     return new ErrorNode(202010);
+};
+
+exports.errStatusLimited = function() {
+    return new ErrorNode(202011);
 };
 
 exports.errNotFoundNode = function() {

@@ -6,6 +6,9 @@ exports.ACTIVE_INTERVAL = SECONDS_OF_DAY * 2;
 
 exports.ROLE_NORMAL = 0;
 exports.ROLE_MANAGER = 1;
+exports.STATUS_NORMAL = 0;
+exports.STATUS_NOVOICE = 1;
+exports.STATUS_NOLOGIN = 2;
 
 exports.isActiveAble = function(active_date, timestamp) {
     if (!timestamp)
@@ -24,9 +27,7 @@ function findUser(key, value, callback) {
     });
 }
 
-exports.findUserByKV = findUser;
-
-exports.findUserById = function(id, callback) {
+function findUserById(id, callback) {
     findUser('id', id, function(err, user) {
         if (err)
             callback(err);
@@ -35,7 +36,10 @@ exports.findUserById = function(id, callback) {
         else
             callback(null, user);
     });
-};
+}
+
+exports.findUserByKV = findUser;
+exports.findUserById = findUserById;
 
 exports.findUsersById = function(ids, callback) {
     if (ids.length < 1)
@@ -54,4 +58,20 @@ exports.findUsersById = function(ids, callback) {
                 callback(null, map);
             }
         });
+};
+
+function checkUserStatus(user, status) {
+    return (user.status < status) || (user.status == status && (user.status_expire < 1 || user.status_expire < brcx.getTimestamp()));
+}
+
+exports.checkUserStatus = checkUserStatus;
+exports.findUserAndCheckStatus = function(id, status, callback) {
+    findUserById(id, function(err, user) {
+        if (err)
+            callback(err);
+        else if (!checkUserStatus(user, status))
+            callback(brcx.errStatusLimited());
+        else
+            callback(null, user);
+    });
 };

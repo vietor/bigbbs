@@ -159,3 +159,31 @@ exports.user_active_action = function(req, res) {
             res.render('back_and_refresh.html');
     });
 };
+
+exports.user_manage_status_action = function(req, res) {
+    var status = 0,
+        status_expire = 0;
+    var timestamp = brcx.getTimestamp();
+    switch (parseInt(req.param('action'))) {
+        case 2:
+            status = 1;
+            status_expire = timestamp + 24 * 3600;
+            break;
+        case 3:
+            status = 2;
+            status_expire = timestamp + 24 * 3600;
+            break;
+        case 4:
+            status = 1;
+            break;
+        case 5:
+            status = 2;
+            break;
+    }
+    brmx.user_modify_status(parseInt(req.param('user_id')), status, status_expire, function(err, user_id) {
+        if (err)
+            common.sendAlter(res, err);
+        else
+            res.redirect("/u/" + user_id);
+    });
+};

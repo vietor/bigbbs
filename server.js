@@ -99,6 +99,11 @@ bigcluster(config.cpu, function() {
     markdown.safe = true;
     swig.setFilter('markdown', markdown);
 
+    function kvmap(k, vmap) {
+        return vmap[k] || '';
+    }
+    swig.setFilter('kvmap', kvmap);
+
     bigrest.listen(port, opts, bind, function() {
         console.info("Starting on %s:%d ...", bind, port);
     });
