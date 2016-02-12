@@ -5,6 +5,15 @@ var gm = require('gm').subClass({
 });
 var common = require('./common');
 
+function validateCaptcha(req, res, callback) {
+    if (!(req.session && req.session.captcha && req.session.captcha === req.param('captcha')))
+        common.sendAlter(res, "错误的机器识别码");
+    else {
+        req.session.captcha = "";
+        callback(callback);
+    }
+}
+
 exports.captcha = function(req, res) {
     var code = brcx.randomString(8);
     gm(88, 20, "#00000000")
@@ -31,11 +40,13 @@ exports.user_register = function(req, res) {
 };
 
 exports.user_register_action = function(req, res) {
-    brmx.user_register(req.param("username"), req.param("password"), req.param("email"), function(err) {
-        if (err)
-            common.sendAlter(res, err);
-        else
-            res.redirect("/user/login");
+    validateCaptcha(req, res, function() {
+        brmx.user_register(req.param("username"), req.param("password"), req.param("email"), function(err) {
+            if (err)
+                common.sendAlter(res, err);
+            else
+                res.redirect("/user/login");
+        });
     });
 };
 
