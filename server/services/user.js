@@ -1,6 +1,30 @@
 var _ = require('underscore');
 var config = require('config');
+var gm = require('gm').subClass({
+    imageMagick: true
+});
 var common = require('./common');
+
+exports.captcha = function(req, res) {
+    var code = brcx.randomString(8);
+    gm(88, 20, "#00000000")
+        .fontSize(18)
+        .stroke("#5e5", 1)
+        .fill("#555")
+        .drawText(8, 16, code)
+        .toBuffer('PNG', function(err, buffer) {
+            if (err)
+                res.status(500).end();
+            else {
+                req.session.captcha = code;
+                res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+                res.header('Expires', '-1');
+                res.header('Pragma', 'no-cache');
+                res.contentType = 'image/png';
+                res.send(buffer);
+            }
+        });
+};
 
 exports.user_register = function(req, res) {
     res.render('user_register.html', {});
@@ -11,7 +35,7 @@ exports.user_register_action = function(req, res) {
         if (err)
             common.sendAlter(res, err);
         else
-            res.redirect("/");
+            res.redirect("/user/login");
     });
 };
 

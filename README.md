@@ -8,6 +8,14 @@ BigBBS
 ## NodeJS
 0.10.0版本以上
 
+### 环境依赖
+
+#### ImageMagick
+用户“机器识别”的图片生成。
+
+#### ghostscript
+部分环境下ImageMagick或出现字体问题。
+
 ## Redis
 2.6.12版本以上
 

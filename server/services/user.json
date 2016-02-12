@@ -3,6 +3,11 @@
     "interceptor": "request_preprocess",
     "processors": [
         {
+            "url": "/captcha",
+            "method": "GET",
+            "processor": "captcha"
+        },
+        {
             "url": "/user/register",
             "method": "GET",
             "processor": "user_register",
@@ -31,6 +36,10 @@
                 {
                     "name": "password_confirm",
                     "match": "password"
+                },
+                {
+                    "name": "captcha",
+                    "regexp": "^[0-9a-f]{8}$"
                 }
             ],
             "workparam": {
