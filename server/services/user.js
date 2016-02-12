@@ -80,11 +80,13 @@ exports.user_findpwd = function(req, res) {
 };
 
 exports.user_findpwd_action = function(req, res) {
-    brmx.user_findpwd(req.param("username"), req.param("email"), function(err) {
-        if (err)
-            common.sendAlter(res, err);
-        else
-            res.redirect("/");
+    validateCaptcha(req, res, function() {
+        brmx.user_findpwd(req.param("username"), req.param("email"), function(err) {
+            if (err)
+                common.sendAlter(res, err);
+            else
+                res.redirect("/");
+        });
     });
 };
 

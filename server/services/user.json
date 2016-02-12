@@ -101,6 +101,10 @@
                 {
                     "name": "email",
                     "regexp": "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$"
+                },
+                {
+                    "name": "captcha",
+                    "regexp": "^[0-9a-f]{8}$"
                 }
             ],
             "workparam": {
