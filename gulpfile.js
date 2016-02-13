@@ -10,8 +10,9 @@ var gulp = require('gulp'),
 var paths = {
     bower: './bower_components',
     static: './webroot',
+    js: './resources/js',
     sass: './resources/sass',
-    images: './resources/images',
+    direct: './resources/direct',
 };
 
 gulp.task('bower', function() {
@@ -41,7 +42,7 @@ gulp.task('bower-copy', ['bower'], function() {
 
     gulp.src(paths.bower + '/bootstrap-markdown/css/*.min.css*')
         .pipe(gulp.dest(paths.static + '/css'));
-    gulp.src(paths.bower + '/bootstrap-markdown/js/*.js*')
+    gulp.src(paths.bower + '/bootstrap-markdown/js/*.js')
         .pipe(uglify())
         .pipe(rename({
             suffix: '.min'
@@ -68,9 +69,18 @@ gulp.task('bower-copy', ['bower'], function() {
         .pipe(gulp.dest(paths.static + '/css'));
 });
 
-gulp.task('images', function() {
-    gulp.src(paths.images + '/*')
-        .pipe(gulp.dest(paths.static + '/images'));
+gulp.task('direct', function() {
+    gulp.src(paths.direct + '/**')
+        .pipe(gulp.dest(paths.static));
+});
+
+gulp.task('js', function() {
+    sass(paths.js + '/*.js')
+        .pipe(uglify())
+        .pipe(rename({
+            suffix: '.min'
+        }))
+        .pipe(gulp.dest(paths.static + '/js'));
 });
 
 gulp.task('css', function() {
@@ -96,7 +106,9 @@ gulp.task('service', ['bower-copy'], function() {
 
 
 gulp.task('watch', ['service'], function() {
-    gulp.watch(paths.sass + '/**/*.scss', ['css']);
+    gulp.watch(paths.js + '/*.js', ['js']);
+    gulp.watch(paths.sass + '/*.scss', ['css']);
+    gulp.watch(paths.direct + '/**', ['direct']);
     gulp.watch(['./server.js', './server/**/*.js', './server/**/*.json'], ['service']);
 });
 
@@ -117,5 +129,5 @@ gulp.task('zip', ['bower-copy', 'images', 'css'], function() {
         .pipe(gulp.dest('./'));
 });
 
-gulp.task('archive', ['bower', 'bower-copy', 'images', 'css', 'zip']);
-gulp.task('default', ['bower', 'bower-copy', 'images', 'css', 'service', 'watch']);
+gulp.task('archive', ['bower', 'bower-copy', 'direct', 'js', 'css', 'zip']);
+gulp.task('default', ['bower', 'bower-copy', 'direct', 'js', 'css', 'service', 'watch']);

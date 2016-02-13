@@ -26,10 +26,10 @@ exports.captcha = function(req, res) {
                 res.status(500).end();
             else {
                 req.session.captcha = code;
-                res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
-                res.header('Expires', '-1');
-                res.header('Pragma', 'no-cache');
                 res.contentType = 'image/png';
+                res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+                res.header('Expires', 'Mon, 26 Jul 1997 05:00:00 GMT');
+                res.header('Pragma', 'no-cache');
                 res.send(buffer);
             }
         });

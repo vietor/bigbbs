@@ -2,6 +2,7 @@
 
 {% block jsinit %}
 <script src="/js/validator.min.js"></script>
+<script src="/js/captcha.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -31,7 +32,7 @@
 	<label class="col-sm-3 control-label" for="captcha">机器识别</label>
 	<div class="col-sm-5">
           <div class="input-group">
-            <div class="input-group-addon"><img src="/captcha" onclick="this.src='/captcha'"></div>
+            <div class="input-group-addon"><img name="_captcha" id="_captcha"></div>
 	    <input class="form-control" id="captcha" name="captcha" type="text" data-minlength="8" maxlength="8" placeholder="输入8位识别码" required/>
             <span class="help-block"></span>
           </div>
