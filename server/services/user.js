@@ -16,11 +16,14 @@ function validateCaptcha(req, res, callback) {
 
 exports.captcha = function(req, res) {
     var code = brcx.randomString(8);
-    gm(88, 20, "#00000000")
-        .fontSize(18)
+    gm(120, 26, "#4e4")
+        .fontSize(23)
         .stroke("#5e5", 1)
         .fill("#555")
-        .drawText(8, 16, code)
+        .drawText(11, 20, code)
+        .strokeWidth(2)
+        .drawLine(0, 5, 120, 7)
+        .drawLine(0, 15, 120, 17)
         .toBuffer('PNG', function(err, buffer) {
             if (err)
                 res.status(500).end();
@@ -55,17 +58,19 @@ exports.user_login = function(req, res) {
 };
 
 exports.user_login_action = function(req, res) {
-    brmx.user_login(req.param("username"), req.param("password"), function(err, user) {
-        if (err)
-            common.sendAlter(res, err);
-        else {
-            req.session.login_user = {
-                id: user.id,
-                role: user.role,
-                username: user.username
-            };
-            res.redirect("/");
-        }
+    validateCaptcha(req, res, function() {
+        brmx.user_login(req.param("username"), req.param("password"), function(err, user) {
+            if (err)
+                common.sendAlter(res, err);
+            else {
+                req.session.login_user = {
+                    id: user.id,
+                    role: user.role,
+                    username: user.username
+                };
+                res.redirect("/");
+            }
+        });
     });
 };
 

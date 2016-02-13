@@ -67,6 +67,10 @@
                     "name": "password",
                     "length_min": 8,
                     "length_max": 18
+                },
+                {
+                    "name": "captcha",
+                    "regexp": "^[0-9a-f]{8}$"
                 }
             ],
             "workparam": {
