@@ -75,7 +75,7 @@ gulp.task('direct', function() {
 });
 
 gulp.task('js', function() {
-    sass(paths.js + '/*.js')
+    gulp.src(paths.js + '/*.js')
         .pipe(uglify())
         .pipe(rename({
             suffix: '.min'
