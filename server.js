@@ -29,6 +29,10 @@ bigcluster(config.cpu, function() {
     var opts = {
         debug: config.debug,
         basepath: path.join(__dirname, "server"),
+        limits: {
+            bodySize: 4 * 1024 * 1024,
+            uploadSize: 4 * 1024 * 1024
+        },
         viewer: {
             render: swig.renderFile,
             filepath: path.join(__dirname, "resources", "views")
