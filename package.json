@@ -1,5 +1,5 @@
 {
-  "name": "bigrest-test",
+  "name": "bigbbs",
   "version": "1.0.0",
   "private": true,
   "description": "social web by forum",
@@ -35,7 +35,7 @@
     "gulp-uglify": "^1.5.1",
     "gulp-zip": "^3.1.0"
   },
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js"
   }

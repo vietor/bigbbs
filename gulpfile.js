@@ -112,7 +112,7 @@ gulp.task('watch', ['service'], function() {
     gulp.watch(['./server.js', './server/**/*.js', './server/**/*.json'], ['service']);
 });
 
-gulp.task('zip', ['bower-copy', 'images', 'css'], function() {
+gulp.task('zip', ['bower-copy', 'direct', 'css'], function() {
     gulp.src([
             './server.js',
             './package.json',
