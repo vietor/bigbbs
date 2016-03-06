@@ -32,6 +32,5 @@ exports.request_preprocess = function(req, res) {
     }
 
     res.locals.csrf = req.csrfToken();
-    res.locals.score = config.limits.score;
     return true;
 };

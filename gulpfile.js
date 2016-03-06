@@ -5,6 +5,7 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     uglify = require('gulp-uglify'),
     minify = require('gulp-minify-css'),
+    prettify = require('gulp-jsbeautifier'),
     expressService = require('gulp-express-service');
 
 var paths = {
@@ -120,13 +121,22 @@ gulp.task('zip', ['bower-copy', 'direct', 'css'], function() {
             './resources/mail/**',
             './resources/views/**',
             './webroot/**',
-            './node_modules/**',
+            './node_modules/**', '!./node_modules/gulp*',
             './config/**', '!./config/local.json'
         ], {
             base: '.'
         })
         .pipe(zip('archive.zip'))
         .pipe(gulp.dest('./'));
+});
+
+gulp.task('format-js', function() {
+    gulp.src('./server/**/*.js')
+        .pipe(prettify({
+            config: '.jsbeautifyrc',
+            mode: 'VERIFY_AND_WRITE'
+        }))
+        .pipe(gulp.dest('./server'));
 });
 
 gulp.task('archive', ['bower', 'bower-copy', 'direct', 'js', 'css', 'zip']);

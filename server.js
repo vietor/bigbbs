@@ -54,7 +54,8 @@ bigcluster(config.cpu, function() {
     swig.setDefaults({
         cache: !opts.debug,
         locals: {
-            webapp: config.webapp
+            webapp: config.webapp,
+            limits: config.limits
         }
     });
 

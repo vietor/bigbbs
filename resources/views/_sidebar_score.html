@@ -8,7 +8,7 @@
         <span class="fa fa-user"></span>&nbsp;&nbsp;<span class="text-primary">注册用户获得</span>
       </div>
       <div class="col-md-6">
-        <span class="text-muted">{{score.user_create}}</span>
+        <span class="text-muted">{{limits.score.user_create}}</span>
       </div>
     </div>
     <div class="row">
@@ -16,7 +16,7 @@
         <span class="fa fa-user"></span>&nbsp;&nbsp;<span class="text-primary">每日签到获得</span>
       </div>
       <div class="col-md-6">
-        <span class="text-muted">{{score.user_active}}</span>
+        <span class="text-muted">{{limits.score.user_active}}</span>
       </div>
     </div>
     <div class="row">
@@ -24,15 +24,16 @@
         <span class="fa fa-file-word-o"></span>&nbsp;&nbsp;<span class="text-primary">创建话题消耗</span>
       </div>
       <div class="col-md-6">
-        <span class="text-muted">{{score.topic_create}}</span>
+        <span class="text-muted">{{limits.score.topic_create}}</span>
       </div>
     </div>
+    {% if limits.active_reply %}
     <div class="row">
       <div class="col-md-6">
         <span class="fa fa-file-text-o"></span>&nbsp;&nbsp;<span class="text-primary">创建回复消耗</span>
       </div>
       <div class="col-md-6">
-        <span class="text-muted">{{score.reply_create}}</span>
+        <span class="text-muted">{{limits.score.reply_create}}</span>
       </div>
     </div>
     <div class="row">
@@ -40,8 +41,9 @@
         <span class="fa fa-file-text"></span>&nbsp;&nbsp;<span class="text-primary">收到回复奖励</span>
       </div>
       <div class="col-md-6">
-        <span class="text-muted">{{score.reply_reward}}</span>
+        <span class="text-muted">{{limits.score.reply_reward}}</span>
       </div>
     </div>
+    {% endif %}
   </div>
 </div>

@@ -2,6 +2,7 @@ var errors = {
     201001: "数据库错误",
     201002: "文件系统错误",
     201003: "缓存系统错误",
+    201004: "不支持的特性",
     202001: "用户不存在",
     202002: "邮箱不存在",
     202003: "密码错误",
@@ -36,6 +37,10 @@ exports.errFSAccess = function(err) {
 
 exports.errCSAccess = function(err) {
     return new ErrorNode(201003, err);
+};
+
+exports.errFeatureAccess = function() {
+    return new ErrorNode(201004);
 };
 
 exports.errNotFoundUser = function() {

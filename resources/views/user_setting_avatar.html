@@ -22,7 +22,7 @@
               <img src="{{current_user.avatar|avatar}}" class="img-rounded avatar-normal">
 	      <img src="{{current_user.avatar|avatar}}" class="img-rounded avatar-small">
 	      <div class="alert alert-info alert-avatar">
-	        <strong>注意</strong> 支持 512k 以内的 PNG / GIF / JPG 图片文件作为头像，推荐使用正方形的图片以获得最佳效果。
+	        <strong>注意</strong> 支持 {{limits.avatar_size_kb}}k 以内的 PNG / GIF / JPG 图片文件作为头像，推荐使用正方形的图片以获得最佳效果。
 	      </div>
 	    </div>
           </div>

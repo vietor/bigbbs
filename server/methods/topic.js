@@ -188,12 +188,15 @@ exports.reply_create = function(user_id, topic_id, content, callback) {
     var score_reward = config.limits.score.reply_reward;
     async.waterfall([
         function(nextcall) {
-            checkUserRateOfCreate(user_id, function(err) {
-                if (err)
-                    nextcall(err);
-                else
-                    nextcall(null);
-            });
+            if (!config.limits.active_reply)
+                nextcall(brcx.errFeatureAccess());
+            else
+                checkUserRateOfCreate(user_id, function(err) {
+                    if (err)
+                        nextcall(err);
+                    else
+                        nextcall(null);
+                });
         },
         function(nextcall) {
             findTopicById(topic_id, function(err, topic) {
@@ -276,17 +279,21 @@ exports.topic_show = function(topic_id, page, pagesize, callback) {
             });
         },
         function(topic, nextcall) {
-            var page_count = brcx.getPageCount(topic.reply_count, pagesize);
-            if (page < 1 || page > page_count)
-                page = page_count;
-            brcx.execSQL("SELECT * FROM  replies WHERE topic_id=$1 ORDER BY create_date ASC OFFSET $2 LIMIT $3", [
-                topic_id, brcx.getPageOffset(page, pagesize), pagesize
-            ], function(err, rows) {
-                if (err)
-                    nextcall(err);
-                else
-                    nextcall(null, page, page_count, topic, rows);
-            });
+            if (!config.limits.active_reply)
+                nextcall(null, 0, 0, topic, []);
+            else {
+                var page_count = brcx.getPageCount(topic.reply_count, pagesize);
+                if (page < 1 || page > page_count)
+                    page = page_count;
+                brcx.execSQL("SELECT * FROM  replies WHERE topic_id=$1 ORDER BY create_date ASC OFFSET $2 LIMIT $3", [
+                    topic_id, brcx.getPageOffset(page, pagesize), pagesize
+                ], function(err, rows) {
+                    if (err)
+                        nextcall(err);
+                    else
+                        nextcall(null, page, page_count, topic, rows);
+                });
+            }
         },
         function(page, page_count, topic, replies, nextcall) {
             var user_ids = [topic.user_id];

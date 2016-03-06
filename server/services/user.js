@@ -162,7 +162,7 @@ exports.user_setting_avatar_action = function(req, res) {
     var avatar_file = req.files.avatar_file;
     if (!avatar_file)
         common.sendAlter(res, '未上传指定文件');
-    else if (avatar_file.size > 512 * 1024)
+    else if (avatar_file.size > config.limits.avatar_size_kb * 1024)
         common.sendAlter(res, '文件长度超过限制');
     else if (!_.contains(['image/jpeg', 'image/png', 'image/gif', 'image/jpg'], avatar_file.type))
         common.sendAlter(res, '不支持的文件类型');
