@@ -35,10 +35,13 @@ exports.getReqNode = function(req) {
     return brcx.findNode(node_id);
 };
 
-function sendAlter(res, err) {
-    res.render('alter.html', {
+function sendAlter(res, err, location) {
+    var objs = {
         message: err.message ? err.message : err
-    });
+    };
+    if (location)
+        objs.location = location;
+    res.render('alter.html', objs);
 }
 
 exports.sendAlter = sendAlter;

@@ -10,7 +10,7 @@ function validateCaptcha(req, res, callback) {
         common.sendAlter(res, "错误的机器识别码");
     else {
         req.session.captcha = "";
-        callback(callback);
+        callback();
     }
 }
 
@@ -198,7 +198,7 @@ exports.user_active_action = function(req, res) {
         if (err)
             common.sendAlter(res, err);
         else
-            res.render('back_and_refresh.html');
+            res.render('refresh.html');
     });
 };
 
