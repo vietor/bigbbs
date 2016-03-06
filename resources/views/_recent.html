@@ -9,7 +9,7 @@
     {% endif %}
   </div>
   <div class="panel-body">
-    {% include '_topics.html' %}
+    {% include '_topic_list.html' %}
   </div>
   <div class="panel-footer">{% if page > 1 %}<span><a href="/recent?page={{page-1}}" id="getmore">上一页</a></span>{% endif %}&nbsp;{% if has_next %}<span class='pull-right'><a href="/recent?page={{page+1}}" id="getmore">下一页</a></span>{% endif %}</div>
 </div>

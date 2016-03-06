@@ -10,7 +10,7 @@ exports.home = function(req, res) {
         if (err)
             common.sendAlter(res, err);
         else
-            res.render('home.html', {
+            res.render('topic_list_all.html', {
                 topic_list: common.dumpTopicList(topics, user_map)
             });
     });
@@ -22,7 +22,7 @@ exports.home_recent = function(req, res) {
         if (err)
             common.sendAlter(res, err);
         else
-            res.render('home_recent.html', {
+            res.render('topic_list_all_recent.html', {
                 topic_list: common.dumpTopicList(topics, user_map),
                 page: page,
                 has_next: topics.length >= config.limits.topic_pagesize
@@ -39,7 +39,7 @@ exports.node = function(req, res) {
             if (err)
                 common.sendAlter(res, err);
             else
-                res.render('node.html', {
+                res.render('topic_list_node.html', {
                     current_node: brcx.findNode(node_id),
                     topic_list: common.dumpTopicList(topics, user_map)
                 });
@@ -56,7 +56,7 @@ exports.node_recent = function(req, res) {
             if (err)
                 common.sendAlter(res, err);
             else
-                res.render('node_recent.html', {
+                res.render('topic_list_node_recent.html', {
                     current_node: brcx.findNode(node_id),
                     topic_list: common.dumpTopicList(topics, user_map),
                     page: page,
