@@ -30,8 +30,8 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {% if not login_user %}
-            <li><a href="/user/register">加入</a></li>
             <li><a href="/user/login">进入</a></li>
+            <li><a href="/user/register">加入</a></li>
             {% else %}
             <li {% if navbar == 'topic_create' %} class="active" {% endif %}><a href="/topic/create">发表</a></li>
             <li {% if navbar == 'user_recent' %} class="active" {% endif %}><a href="/u/{{login_user.id}}/recent">过往</a></li>

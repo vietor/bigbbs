@@ -121,7 +121,6 @@ gulp.task('zip', ['bower-copy', 'direct', 'css'], function() {
             './resources/mail/**',
             './resources/views/**',
             './webroot/**',
-            './node_modules/**', '!./node_modules/gulp*',
             './config/**', '!./config/local.json'
         ], {
             base: '.'
