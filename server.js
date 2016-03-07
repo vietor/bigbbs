@@ -14,17 +14,17 @@ bigcluster(config.cpu, function() {
 
     var port = config.port;
     var bind = config.bind || "";
+    var avatar = config.store.avatar;
 
     var statics = [{
         urlpath: '/',
         filepath: path.join(__dirname, "webroot")
     }];
-    if (config.store.avatar.LOCAL) {
+    if (avatar.type == 'localfs')
         statics.push({
-            urlpath: config.store.avatar.LOCAL.url,
-            filepath: config.store.avatar.LOCAL.path
+            urlpath: avatar.params.baseurl,
+            filepath: avatar.params.filepath
         });
-    }
 
     var opts = {
         debug: config.debug,
@@ -79,14 +79,12 @@ bigcluster(config.cpu, function() {
         return tstext(timestamp);
     });
     swig.setFilter('avatar', function(avatar_uri) {
-        var raw_url = avatar_uri;
+        var raw_url = "";
         if (avatar_uri) {
-            var pos = avatar_uri.indexOf(':');
-            if (pos > 0) {
-                var type = avatar_uri.substring(0, pos);
-                var use_type = config.store.avatar[type];
-                if (use_type)
-                    raw_url = use_type.url + avatar_uri.substring(pos + 1);
+            if (!avatar.params.baseurl)
+                raw_url = avatar_uri;
+            else {
+                raw_url = avatar.params.baseurl + avatar_uri;
             }
         }
         return raw_url || "/images/avatar.png";

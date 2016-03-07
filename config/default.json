@@ -24,10 +24,10 @@
         },
         "safekey": "resetpwd-safe-key",
         "avatar": {
-            "type": "LOCAL",
-            "LOCAL": {
-                "url": "web path",
-                "path": "store file path"
+            "type": "localfs",
+            "params": {
+                "baseurl": "web base url",
+                "filepath": "store file path"
             }
         }
     },

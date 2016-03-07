@@ -5,9 +5,9 @@ var config = require('config');
 var uuid = require('node-uuid');
 
 var store_type = config.store.avatar.type;
-var store_params = config.store.avatar[store_type];
+var store_params = config.store.avatar.params;
 
-if (!store_params || !_.contains(['LOCAL'], store_type)) {
+if (!store_params || !_.contains(['localfs'], store_type)) {
     throw Error('Unsupported avatar store type');
 }
 
@@ -36,15 +36,15 @@ function mkdirp(filepath) {
 }
 
 exports.storeAvatar = function(origin_filepath, callback) {
-    if (store_type == "LOCAL") {
+    if (store_type == "localfs") {
         var filename = uuid.v1().replace(/-/g, '') + path.extname(origin_filepath);
         var daypath = brcx.getDayCode('/').substring(0, 7);
-        var rawpath = mkdirp(path.join(store_params.path, daypath));
+        var rawpath = mkdirp(path.join(store_params.filepath, daypath));
         fileCopy(origin_filepath, path.join(rawpath, filename), function(err) {
             if (err)
                 callback(brcx.errFSAccess(err));
             else
-                callback(null, 'LOCAL:' + daypath + '/' + filename);
+                callback(null, daypath + '/' + filename);
         });
     }
 };
