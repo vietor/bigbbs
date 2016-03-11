@@ -10,11 +10,9 @@ function mkUKey(username) {
 }
 
 function findUserAndCheckStatus(id, callback) {
-    brcx.findUserById(id, function(err, user) {
+    brcx.findUserAndCheckStatus(id, brcx.STATUS_NOLOGIN, function(err, user) {
         if (err)
             callback(err);
-        else if (!brcx.checkUserStatus(user, brcx.STATUS_NOLOGIN))
-            callback(brcx.errStatusLimited());
         else
             callback(null, user);
     });
@@ -69,13 +67,9 @@ exports.user_register = function(username, password, email, callback) {
 };
 
 exports.user_login = function(username, password, callback) {
-    brcx.findUserByKV('ukey', mkUKey(username), function(err, user) {
+    brcx.findUserByKVAndCheckStatus('ukey', mkUKey(username), brcx.STATUS_NOLOGIN, function(err, user) {
         if (err)
             callback(err);
-        else if (!user)
-            callback(brcx.errNotFoundUser());
-        else if (!brcx.checkUserStatus(user, brcx.STATUS_NOLOGIN))
-            callback(brcx.errStatusLimited());
         else if (user.password != brcx.md5(password))
             callback(brcx.errInvalidUserOrPwd());
         else
@@ -192,15 +186,11 @@ exports.user_findpwd = function(username, email, callback) {
     async.waterfall([
         function(nextcall) {
             var time = brcx.getTimestamp();
-            brcx.findUserByKV('ukey', mkUKey(username), function(err, user) {
+            brcx.findUserByKVAndCheckStatus('ukey', mkUKey(username), brcx.STATUS_NOLOGIN, function(err, user) {
                 if (err)
                     nextcall(err);
-                else if (!user)
-                    nextcall(brcx.errNotFoundUser());
                 else if (user.email != asKey(email))
                     nextcall(brcx.errInvalidEmailOwner());
-                else if (!brcx.checkUserStatus(user, brcx.STATUS_NOLOGIN))
-                    callback(brcx.errStatusLimited());
                 else if (time - user.reset_date < config.limits.second_of_findpwd)
                     nextcall(brcx.errBusyForFindPwd());
                 else

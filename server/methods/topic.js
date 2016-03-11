@@ -16,11 +16,9 @@ function findTopicById(topic_id, callback) {
 }
 
 function findUserAndCheckScore(user_id, score, callback) {
-    brcx.findUserById(user_id, function(err, user) {
+    brcx.findUserAndCheckStatus(user_id, brcx.STATUS_NOVOICE, function(err, user) {
         if (err)
             callback(err);
-        else if (!brcx.checkUserStatus(user, brcx.STATUS_NOVOICE))
-            callback(brcx.errStatusLimited());
         else if (user.score < score)
             callback(brcx.errScoreNotEnouth());
         else

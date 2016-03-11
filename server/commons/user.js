@@ -64,11 +64,23 @@ function checkUserStatus(user, status) {
     return (user.status < status) || (user.status == status && (user.status_expire < 1 || user.status_expire < brcx.getTimestamp()));
 }
 
-exports.checkUserStatus = checkUserStatus;
 exports.findUserAndCheckStatus = function(id, status, callback) {
     findUserById(id, function(err, user) {
         if (err)
             callback(err);
+        else if (!checkUserStatus(user, status))
+            callback(brcx.errStatusLimited());
+        else
+            callback(null, user);
+    });
+};
+
+exports.findUserByKVAndCheckStatus = function(key, value, status, callback) {
+    findUser(key, value, function(err, user) {
+        if (err)
+            callback(err);
+        else if (!user)
+            callback(brcx.errNotFoundUser());
         else if (!checkUserStatus(user, status))
             callback(brcx.errStatusLimited());
         else
