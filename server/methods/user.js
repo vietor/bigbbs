@@ -1,5 +1,7 @@
 var async = require('async');
 var config = require('config');
+var datastore = require('../utils/datastore'),
+    UserModel = datastore.UserModel;
 
 function asKey(text) {
     return text.toLowerCase();
@@ -41,14 +43,14 @@ exports.user_register = function(username, password, email, callback) {
             });
         },
         function(nextcall) {
-            brcx.execSQL("INSERT INTO users(ukey, username, password, email, score, create_date) VALUES($1, $2, $3, $4, $5, $6)", [
-                mkUKey(username),
-                username,
-                brcx.md5(password),
-                asKey(email),
-                config.limits.score.user_create,
-                brcx.getTimestamp()
-            ], function(err) {
+            UserModel.insert({
+                ukey: mkUKey(username),
+                username: username,
+                password: brcx.md5(password),
+                email: asKey(email),
+                score: config.limits.score.user_create,
+                create_date: brcx.getTimestamp()
+            }, function(err) {
                 if (err)
                     nextcall(err);
                 else
@@ -105,9 +107,13 @@ exports.user_setting_profile = function(id, email, homepage, signature, callback
                 });
         },
         function(nextcall) {
-            brcx.execSQL("UPDATE users SET email=$1, homepage=$2, signature=$3 WHERE id=$4", [
-                asKey(email), homepage, signature, id
-            ], function(err) {
+            UserModel.update({
+                id: id
+            }, {
+                email: asKey(email),
+                homepage: homepage,
+                signature: signature
+            }, function(err) {
                 if (err)
                     nextcall(err);
                 else
@@ -133,9 +139,11 @@ exports.user_setting_password = function(id, password, newpassword, callback) {
             });
         },
         function(nextcall) {
-            brcx.execSQL("UPDATE users SET password=$1 WHERE id=$2", [
-                brcx.md5(newpassword), id
-            ], function(err) {
+            UserModel.update({
+                id: id
+            }, {
+                password: brcx.md5(newpassword)
+            }, function(err) {
                 if (err)
                     nextcall(err);
                 else
@@ -167,9 +175,11 @@ exports.user_setting_avatar = function(id, file, callback) {
             });
         },
         function(avatar_uri, nextcall) {
-            brcx.execSQL("UPDATE users SET avatar=$1 WHERE id=$2", [
-                avatar_uri, id
-            ], function(err) {
+            UserModel.update({
+                id: id
+            }, {
+                avatar: avatar_uri
+            }, function(err) {
                 if (err)
                     nextcall(err);
                 else
@@ -199,9 +209,12 @@ exports.user_findpwd = function(username, email, callback) {
         },
         function(user, time, nextcall) {
             var code = brcx.randomString(12);
-            brcx.execSQL("UPDATE users SET reset_code=$1, reset_date=$2 WHERE id=$3", [
-                code, time, user.id
-            ], function(err) {
+            UserModel.update({
+                id: user.id
+            }, {
+                reset_code: code,
+                reset_date: time
+            }, function(err) {
                 if (err)
                     nextcall(err);
                 else
@@ -243,9 +256,12 @@ exports.user_resetpwd = function(code, newpassword, callback) {
             });
         },
         function(user, nextcall) {
-            brcx.execSQL("UPDATE users SET password=$1, reset_code=\"\" WHERE id=$2", [
-                brcx.md5(newpassword), user.id
-            ], function(err) {
+            UserModel.update({
+                id: user.id
+            }, {
+                reset_code: "",
+                password: brcx.md5(newpassword)
+            }, function(err) {
                 if (err)
                     nextcall(err);
                 else
@@ -274,9 +290,18 @@ exports.user_active = function(id, callback) {
                 var days = 1;
                 if (timestamp - user.active_date < brcx.ACTIVE_INTERVAL)
                     days = user.active_days + 1;
-                brcx.execSQL("UPDATE users SET active_date=$1, active_days=$2, score=score+$3 WHERE id=$4", [
-                    timestamp, days, config.limits.score.user_active, id
-                ], function(err) {
+                UserModel.update({
+                    id: id
+                }, {
+                    $set: {
+                        active_date: timestamp,
+                        active_days: days
+                    },
+                    $inc: {
+                        score: config.limits.score.user_active
+
+                    }
+                }, function(err) {
                     if (err)
                         nextcall(err);
                     else
@@ -298,9 +323,12 @@ exports.user_modify_status = function(id, status, status_expire, callback) {
             });
         },
         function(user, nextcall) {
-            brcx.execSQL("UPDATE users SET status=$1, status_expire=$2 WHERE id=$3", [
-                status, status_expire, id
-            ], function(err) {
+            UserModel.update({
+                id: id
+            }, {
+                status: status,
+                status_expire: status_expire
+            }, function(err) {
                 if (err)
                     nextcall(err);
                 else

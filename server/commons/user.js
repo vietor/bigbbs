@@ -1,4 +1,6 @@
 var _ = require('underscore');
+var datastore = require('../utils/datastore'),
+    UserModel = datastore.UserModel;
 
 var SECONDS_OF_DAY = 24 * 3600;
 
@@ -17,7 +19,9 @@ exports.isActiveAble = function(active_date, timestamp) {
 };
 
 function findUser(key, value, callback) {
-    brcx.execSQL("SELECT * FROM users WHERE " + key + "=$1", [value], function(err, rows) {
+    var match = {};
+    match[key] = value;
+    UserModel.find(match, function(err, rows) {
         if (err)
             callback(err);
         else if (rows.length < 1)
@@ -45,9 +49,11 @@ exports.findUsersById = function(ids, callback) {
     if (ids.length < 1)
         callback(null, {});
     else
-        brcx.execSQL("SELECT * FROM users WHERE id IN (" + _.map(ids, function(item, i) {
-            return '$' + (i + 1);
-        }).join(',') + ")", ids, function(err, rows) {
+        UserModel.find({
+            id: {
+                $in: ids
+            }
+        }, function(err, rows) {
             if (err)
                 callback(err);
             else {

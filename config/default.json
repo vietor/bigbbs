@@ -32,7 +32,7 @@
         }
     },
     "limits": {
-        "active_reply": false,
+        "active_reply": true,
         "rate_of_create": 5,
         "topic_pagesize": 30,
         "reply_pagesize": 100,

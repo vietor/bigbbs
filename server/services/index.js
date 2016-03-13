@@ -1,8 +1,8 @@
 var config = require('config');
 
-exports.request_failure = function(req, res) {
+exports.request_failure = function(req, res, name, type) {
     res.render("alter.html", {
-        message: "错误的请求参数"
+        message: "错误的请求参数" + (!config.debug ? "" : name + ',' + type + ' url: ' + req.path)
     });
 };
 
