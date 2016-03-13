@@ -34,7 +34,7 @@ function Query(executor) {
     };
 }
 
-function CommandParser(executor) {
+function ModelShell(executor) {
     this.find = function(match, select, callback) {
         if (typeof select == 'function') {
             callback = select;
@@ -75,12 +75,12 @@ function PgSQLProxy(params) {
     function execSQL(sql, parameters, callback) {
         pg.connect(params, function(err, client, done) {
             if (err)
-                callback(brcx.errDBAccess(err));
+                callback(err);
             else
                 client.query(sql, parameters, function(err, result) {
                     done();
                     if (err)
-                        callback(brcx.errDBAccess(err));
+                        callback(err);
                     else
                         callback(null, result.rows);
                 });
@@ -89,81 +89,93 @@ function PgSQLProxy(params) {
 
     function Executor(name) {
 
-        function parseMatch(match, index, wheres, parameters) {
+        function parseWhere(match, index, parameters) {
+            var wheres = [];
+            var base = index;
             _.mapObject(match, function(value, key) {
                 if (typeof value != 'object') {
-                    wheres.push(key + "=$" + (++index));
+                    wheres.push(key + '=$' + (++index));
                     parameters.push(value);
                 } else {
                     _.mapObject(value, function(v, k) {
-                        if (k == '$lte') {
-                            wheres.push(key + "<=$" + (++index));
+                        if (k == '$eq') {
+                            wheres.push(key + '=$' + (++index));
+                            parameters.push(v);
+                        } else if (k == '$ne') {
+                            wheres.push(key + '!=$' + (++index));
+                            parameters.push(v);
+                        } else if (k == '$lte') {
+                            wheres.push(key + '<=$' + (++index));
                             parameters.push(v);
                         } else if (k == '$lt') {
-                            wheres.push(key + "<$" + (++index));
+                            wheres.push(key + '<$' + (++index));
                             parameters.push(v);
                         } else if (k == '$gte') {
-                            wheres.push(key + ">=$" + (++index));
+                            wheres.push(key + '>=$' + (++index));
                             parameters.push(v);
                         } else if (k == '$gt') {
-                            wheres.push(key + ">$" + (++index));
+                            wheres.push(key + '>$' + (++index));
                             parameters.push(v);
-                        } else if (k == '$in') {
+                        } else if (k == '$in' || k == '$nin') {
                             var idxs = [];
                             _.each(v, function(o) {
                                 parameters.push(o);
                                 idxs.push('$' + (++index));
                             });
-                            wheres.push(key + ' IN (' + idxs.join(',') + ')');
+                            wheres.push(key + (k == '$in' ? ' IN ' : ' NOT IN ') + '(' + idxs.join(',') + ')');
                         }
                     });
                 }
             });
-            return index;
+            return {
+                skip: index - base,
+                subsql: wheres.length < 1 ? '' : ' WHERE ' + wheres.join(' AND ')
+            };
         }
 
         this.find = function(match, select, sort, offset, limit, callback) {
             var index = 0,
                 parameters = [],
-                sql = "SELECT";
+                sql = 'SELECT';
             if (!select)
-                sql += " *";
+                sql += ' *';
             else {
                 if (util.isArray(select))
-                    sql += " " + select.join(",");
+                    sql += ' ' + select.join(',');
                 else {
                     var columns = [];
                     _.mapObject(select, function(value, key) {
-                        if (value && value == 1)
+                        if (value)
                             columns.push(key);
                     });
-                    sql += " " + columns.join(",");
+                    sql += ' ' + columns.join(',');
                 }
             }
-            sql += " FROM " + name;
+            sql += ' FROM ' + name;
             if (match) {
-                var wheres = [];
-                index = parseMatch(match, 0, wheres, parameters);
-                if (wheres.length > 0)
-                    sql += " WHERE " + wheres.join(" AND ");
+                var where = parseWhere(match, 0, parameters);
+                if (where.subsql) {
+                    sql += where.subsql;
+                    index += where.skip;
+                }
             }
             if (sort) {
                 var sorts = [];
                 _.mapObject(sort, function(value, key) {
                     if (value == 1)
-                        sorts.push(key + " ASC");
+                        sorts.push(key + ' ASC');
                     else if (value == -1)
-                        sorts.push(key + " DESC");
+                        sorts.push(key + ' DESC');
                 });
                 if (sorts.length > 0)
-                    sql += " ORDER BY " + sorts.join(",");
+                    sql += ' ORDER BY ' + sorts.join(',');
             }
             if (limit >= 0) {
-                sql += " LIMIT $" + (++index);
+                sql += ' LIMIT $' + (++index);
                 parameters.push(limit);
             }
             if (offset >= 0) {
-                sql += " OFFSET $" + (++index);
+                sql += ' OFFSET $' + (++index);
                 parameters.push(offset);
             }
             execSQL(sql, parameters, function(err, rows) {
@@ -174,17 +186,17 @@ function PgSQLProxy(params) {
         this.insert = function(fields, options, callback) {
             var index = 0,
                 parameters = [],
-                sql = "INSERT INTO " + name;
+                sql = 'INSERT INTO ' + name;
             var columns = [],
                 indexs = [];
             _.mapObject(fields, function(value, key) {
                 columns.push(key);
-                indexs.push("$" + (++index));
+                indexs.push('$' + (++index));
                 parameters.push(value);
             });
-            sql += " (" + columns.join(",") + ") VALUES(" + indexs.join(",") + ")";
+            sql += ' (' + columns.join(',') + ') VALUES(' + indexs.join(',') + ')';
             if (options.return)
-                sql += " RETURNING " + options.return;
+                sql += ' RETURNING ' + options.return;
             execSQL(sql, parameters, function(err, rows) {
                 if (err)
                     callback(err);
@@ -200,7 +212,7 @@ function PgSQLProxy(params) {
         this.update = function(match, fields, options, callback) {
             var index = 0,
                 parameters = [],
-                sql = "UPDATE " + name + " SET";
+                sql = 'UPDATE ' + name + ' SET';
             var fieldSet = null,
                 fieldInc = null,
                 sets = [];
@@ -212,27 +224,26 @@ function PgSQLProxy(params) {
                 fieldSet = fields;
             if (fieldInc) {
                 _.mapObject(fieldInc, function(value, key) {
-                    sets.push(key + "=" + key + "+$" + (++index));
+                    sets.push(key + '=' + key + '+$' + (++index));
                     parameters.push(value);
                 });
             }
             if (fieldSet) {
                 _.mapObject(fieldSet, function(value, key) {
-                    if (key.substring(0, 1) == "$")
+                    if (key.substring(0, 1) == '$')
                         return;
-                    sets.push(key + "=$" + (++index));
+                    sets.push(key + '=$' + (++index));
                     parameters.push(value);
                 });
             }
-            sql += " " + sets.join(",");
+            sql += ' ' + sets.join(',');
             if (match) {
-                var wheres = [];
-                parseMatch(match, index, wheres, parameters);
-                if (wheres.length > 0)
-                    sql += " WHERE " + wheres.join(" AND ");
+                var where = parseWhere(match, index, parameters);
+                if (where.subsql)
+                    sql += where.subsql;
             }
             if (options.return)
-                sql += " RETURNING " + options.return;
+                sql += ' RETURNING ' + options.return;
             execSQL(sql, parameters, function(err, rows) {
                 if (err)
                     callback(err);
@@ -247,12 +258,11 @@ function PgSQLProxy(params) {
 
         this.remove = function(match, callback) {
             var parameters = [],
-                sql = "DELETE FROM " + name;
+                sql = 'DELETE FROM ' + name;
             if (match) {
-                var wheres = [];
-                parseMatch(match, 0, wheres, parameters);
-                if (wheres.length > 0)
-                    sql += " WHERE " + wheres.join(" AND ");
+                var where = parseWhere(match, 0, parameters);
+                if (where.subsql)
+                    sql += where.subsql;
             }
             execSQL(sql, parameters, function(err) {
                 if (err)
@@ -264,12 +274,12 @@ function PgSQLProxy(params) {
     }
 
     this.model = function(name) {
-        return new CommandParser(new Executor(name));
+        return new ModelShell(new Executor(name));
     };
 }
 
 exports.connect = function(type, params) {
     if (type == 'pgsql')
         return new PgSQLProxy(params);
-    throw new TypeError("Unsupport database type: " + type);
+    throw new TypeError('Unsupport database type: ' + type);
 };

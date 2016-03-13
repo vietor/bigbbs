@@ -52,7 +52,7 @@ exports.user_register = function(username, password, email, callback) {
                 create_date: brcx.getTimestamp()
             }, function(err) {
                 if (err)
-                    nextcall(err);
+                    nextcall(brcx.errDBAccess(err));
                 else
                     nextcall(null);
             });
@@ -115,7 +115,7 @@ exports.user_setting_profile = function(id, email, homepage, signature, callback
                 signature: signature
             }, function(err) {
                 if (err)
-                    nextcall(err);
+                    nextcall(brcx.errDBAccess(err));
                 else
                     nextcall(null);
             });
@@ -145,7 +145,7 @@ exports.user_setting_password = function(id, password, newpassword, callback) {
                 password: brcx.md5(newpassword)
             }, function(err) {
                 if (err)
-                    nextcall(err);
+                    nextcall(brcx.errDBAccess(err));
                 else
                     nextcall(null);
             });
@@ -181,7 +181,7 @@ exports.user_setting_avatar = function(id, file, callback) {
                 avatar: avatar_uri
             }, function(err) {
                 if (err)
-                    nextcall(err);
+                    nextcall(brcx.errDBAccess(err));
                 else
                     nextcall(null);
             });
@@ -216,7 +216,7 @@ exports.user_findpwd = function(username, email, callback) {
                 reset_date: time
             }, function(err) {
                 if (err)
-                    nextcall(err);
+                    nextcall(brcx.errDBAccess(err));
                 else
                     nextcall(null, user, code);
             });
@@ -263,7 +263,7 @@ exports.user_resetpwd = function(code, newpassword, callback) {
                 password: brcx.md5(newpassword)
             }, function(err) {
                 if (err)
-                    nextcall(err);
+                    nextcall(brcx.errDBAccess(err));
                 else
                     nextcall(null);
             });
@@ -303,7 +303,7 @@ exports.user_active = function(id, callback) {
                     }
                 }, function(err) {
                     if (err)
-                        nextcall(err);
+                        nextcall(brcx.errDBAccess(err));
                     else
                         nextcall(null);
                 });
@@ -330,7 +330,7 @@ exports.user_modify_status = function(id, status, status_expire, callback) {
                 status_expire: status_expire
             }, function(err) {
                 if (err)
-                    nextcall(err);
+                    nextcall(brcx.errDBAccess(err));
                 else
                     nextcall(null, id);
             });

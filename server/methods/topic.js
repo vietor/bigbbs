@@ -73,7 +73,7 @@ exports.topic_create = function(user_id, node_id, title, content, callback) {
                 return: "id"
             }, function(err, data) {
                 if (err)
-                    nextcall(err);
+                    nextcall(brcx.errDBAccess(err));
                 else
                     nextcall(null, data.id);
             });
@@ -88,7 +88,7 @@ exports.topic_create = function(user_id, node_id, title, content, callback) {
                 }
             }, function(err) {
                 if (err)
-                    nextcall(err);
+                    nextcall(brcx.errDBAccess(err));
                 else
                     nextcall(null, topic_id);
             });
@@ -159,7 +159,7 @@ exports.topic_list = function(node_id, otype, offset, limit, callback) {
                 });
                 brcx.findUsersById(_.uniq(user_ids), function(err, user_map) {
                     if (err)
-                        nextcall(null);
+                        nextcall(brcx.errDBAccess(err));
                     else
                         nextcall(null, topics, user_map);
                 });
@@ -195,7 +195,7 @@ exports.topic_move = function(user_id, topic_id, node_id, callback) {
                     node_id: node_id
                 }, function(err) {
                     if (err)
-                        nextcall(err);
+                        nextcall(brcx.errDBAccess(err));
                     else
                         nextcall(null, topic_id);
                 });

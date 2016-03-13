@@ -23,7 +23,7 @@ function findUser(key, value, callback) {
     match[key] = value;
     UserModel.find(match, function(err, rows) {
         if (err)
-            callback(err);
+            callback(brcx.errDBAccess(err));
         else if (rows.length < 1)
             callback(null, null);
         else
@@ -34,7 +34,7 @@ function findUser(key, value, callback) {
 function findUserById(id, callback) {
     findUser('id', id, function(err, user) {
         if (err)
-            callback(err);
+            callback(brcx.errDBAccess(err));
         else if (!user)
             callback(brcx.errNotFoundUser());
         else
@@ -55,7 +55,7 @@ exports.findUsersById = function(ids, callback) {
             }
         }, function(err, rows) {
             if (err)
-                callback(err);
+                callback(brcx.errDBAccess(err));
             else {
                 var map = {};
                 _.each(rows, function(row) {

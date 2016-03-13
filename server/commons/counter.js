@@ -15,20 +15,18 @@ exports.addCounter = function(id, callback, count) {
         $inc: {
             value: count
         }
-    }, {
-        return: "value"
-    }, function(err, data) {
+    }, function(err) {
         if (err)
-            callback(err);
+            callback(brcx.errDBAccess(err));
         else
-            callback(null, data.value);
+            callback(null);
     });
 };
 
 exports.readCounters = function(callback) {
     CounterModel.find({}, function(err, rows) {
         if (err)
-            callback(err);
+            callback(brcx.errDBAccess(err));
         else {
             var counters = {};
             _.each(rows, function(row) {
