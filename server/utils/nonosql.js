@@ -1,19 +1,67 @@
 var util = require('util');
 var _ = require('underscore');
 
+var NUMBER = 1,
+    STRING = 2;
+
+exports.NUMBER = NUMBER;
+exports.STRING = STRING;
+
+function Transfer(fields) {
+    var _fields = [];
+
+    _.mapObject(fields, function(value, key) {
+        if (typeof value == 'number')
+            _fields.push({
+                key: key,
+                type: value,
+                default: null
+            });
+        else
+            _fields.push({
+                key: key,
+                type: value.type,
+                default: value.default
+            });
+    });
+
+    this.exec = function(obj) {
+        var out = {};
+        _.each(_fields, function(row) {
+            var value = obj[row.key];
+            if (_.isUndefined(value) || _.isNull(value) || _.isNaN(value)) {
+                if (row.default)
+                    out[row.key] = row.default;
+            } else {
+                if (row.type == NUMBER)
+                    out[row.key] = Number(value);
+                else if (row.type == STRING)
+                    out[row.key] = '' + value;
+                else
+                    out[row.key] = value;
+            }
+        });
+        _.mapObject(obj, function(value, key) {
+            if (!_.has(out, key))
+                out[key] = value;
+        });
+        return out;
+    };
+}
+
 function Query(executor) {
-    var _match = null;
-    var _project = null;
+    var _query = null;
+    var _fields = null;
     var _sort = null;
     var _offset = -1;
     var _limit = -1;
 
-    this.match = function(match) {
-        _match = match;
+    this.match = function(query) {
+        _query = query;
         return this;
     };
     this.select = function(fields) {
-        _project = fields;
+        _fields = fields;
         return this;
     };
     this.sort = function(fields) {
@@ -30,7 +78,7 @@ function Query(executor) {
     };
 
     this.exec = function(callback) {
-        executor.find(_match, _project, _sort, _offset, _limit, callback);
+        executor.find(_query, _fields, _sort, _offset, _limit, callback);
     };
 }
 
@@ -87,12 +135,12 @@ function PgSQLProxy(params) {
         });
     }
 
-    function Executor(name) {
+    function Executor(name, transfer) {
 
-        function parseWhere(match, index, parameters) {
+        function parseWhere(query, index, parameters) {
             var wheres = [];
             var base = index;
-            _.mapObject(match, function(value, key) {
+            _.mapObject(query, function(value, key) {
                 if (typeof value != 'object') {
                     wheres.push(key + '=$' + (++index));
                     parameters.push(value);
@@ -133,18 +181,18 @@ function PgSQLProxy(params) {
             };
         }
 
-        this.find = function(match, select, sort, offset, limit, callback) {
+        this.find = function(query, fields, sort, offset, limit, callback) {
             var index = 0,
                 parameters = [],
                 sql = 'SELECT';
-            if (!select)
+            if (!fields)
                 sql += ' *';
             else {
-                if (util.isArray(select))
-                    sql += ' ' + select.join(',');
+                if (util.isArray(fields))
+                    sql += ' ' + fields.join(',');
                 else {
                     var columns = [];
-                    _.mapObject(select, function(value, key) {
+                    _.mapObject(fields, function(value, key) {
                         if (value)
                             columns.push(key);
                     });
@@ -152,8 +200,8 @@ function PgSQLProxy(params) {
                 }
             }
             sql += ' FROM ' + name;
-            if (match) {
-                var where = parseWhere(match, 0, parameters);
+            if (query) {
+                var where = parseWhere(query, 0, parameters);
                 if (where.subsql) {
                     sql += where.subsql;
                     index += where.skip;
@@ -179,7 +227,12 @@ function PgSQLProxy(params) {
                 parameters.push(offset);
             }
             execSQL(sql, parameters, function(err, rows) {
-                callback(err, rows);
+                if (err)
+                    callback(err);
+                else
+                    callback(null, _.map(rows, function(row) {
+                        return transfer.exec(row);
+                    }));
             });
         };
 
@@ -203,13 +256,13 @@ function PgSQLProxy(params) {
                 else {
                     var value = null;
                     if (options.return)
-                        value = rows[0];
+                        value = transfer.exec(rows[0]);
                     callback(null, value);
                 }
             });
         };
 
-        this.update = function(match, fields, options, callback) {
+        this.update = function(query, fields, options, callback) {
             var index = 0,
                 parameters = [],
                 sql = 'UPDATE ' + name + ' SET';
@@ -237,8 +290,8 @@ function PgSQLProxy(params) {
                 });
             }
             sql += ' ' + sets.join(',');
-            if (match) {
-                var where = parseWhere(match, index, parameters);
+            if (query) {
+                var where = parseWhere(query, index, parameters);
                 if (where.subsql)
                     sql += where.subsql;
             }
@@ -250,17 +303,17 @@ function PgSQLProxy(params) {
                 else {
                     var value = null;
                     if (options.return)
-                        value = rows[0];
+                        value = transfer.exec(rows[0]);
                     callback(null, value);
                 }
             });
         };
 
-        this.remove = function(match, callback) {
+        this.remove = function(query, callback) {
             var parameters = [],
                 sql = 'DELETE FROM ' + name;
-            if (match) {
-                var where = parseWhere(match, 0, parameters);
+            if (query) {
+                var where = parseWhere(query, 0, parameters);
                 if (where.subsql)
                     sql += where.subsql;
             }
@@ -273,8 +326,8 @@ function PgSQLProxy(params) {
         };
     }
 
-    this.model = function(name) {
-        return new ModelShell(new Executor(name));
+    this.model = function(name, fields) {
+        return new ModelShell(new Executor(name, new Transfer(fields)));
     };
 }
 
