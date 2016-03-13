@@ -64,7 +64,7 @@ exports.user_login_action = function(req, res) {
                 common.sendAlter(res, err);
             else {
                 req.session.login_user = {
-                    id: user.id,
+                    id: user._id,
                     role: user.role,
                     username: user.username
                 };
@@ -116,7 +116,7 @@ exports.user_show = function(req, res) {
             common.sendAlter(res, err);
         else
             res.render('user_show.html', {
-                current_user: user,
+                current_user: common.dumpUserDetail(user),
                 topic_list: common.dumpTopicList(topics, user_map)
             });
     });
@@ -130,7 +130,7 @@ exports.user_recent = function(req, res) {
             common.sendAlter(res, err);
         else
             res.render('user_recent.html', {
-                current_user: user,
+                current_user: common.dumpUserDetail(user),
                 topic_list: common.dumpTopicList(topics, user_map),
                 page: page,
                 has_next: topics.length >= config.limits.topic_pagesize
@@ -149,7 +149,7 @@ exports.user_setting_profile_action = function(req, res) {
             common.sendAlter(res, err);
         else
             res.render('user_setting_profile.html', {
-                current_user: user
+                current_user: common.dumpUserDetail(user)
             });
     });
 };
@@ -172,7 +172,7 @@ exports.user_setting_avatar_action = function(req, res) {
                 common.sendAlter(res, err);
             else
                 res.render('user_setting_avatar.html', {
-                    current_user: user
+                    current_user: common.dumpUserDetail(user)
                 });
         });
 };
@@ -187,7 +187,7 @@ exports.user_setting_password_action = function(req, res) {
             common.sendAlter(res, err);
         else
             res.render('user_setting_password.html', {
-                current_user: user
+                current_user: common.dumpUserDetail(user)
             });
     });
 };
@@ -222,7 +222,8 @@ exports.user_manage_status_action = function(req, res) {
             status = 2;
             break;
     }
-    brmx.user_modify_status(parseInt(req.param('user_id')), status, status_expire, function(err, user_id) {
+    var user_id = parseInt(req.param('user_id'));
+    brmx.user_modify_status(user_id, status, status_expire, function(err) {
         if (err)
             common.sendAlter(res, err);
         else

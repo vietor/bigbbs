@@ -4,15 +4,16 @@ var nonosql = require('./nonosql');
 var nsclient = nonosql.connect('pgsql', config.store.pg);
 
 exports.CounterModel = nsclient.model("counters", {
+    _id: nonosql.STRING,
     value: nonosql.NUMBER
 });
 
 exports.UserModel = nsclient.model("users", {
-    id: nonosql.NUMBER
+    _id: nonosql.NUMBER
 });
 
 exports.TopicModel = nsclient.model("topics", {
-    id: nonosql.NUMBER,
+    _id: nonosql.NUMBER,
     node_id: nonosql.NUMBER,
     user_id: nonosql.NUMBER,
     update_user_id: {
@@ -22,7 +23,7 @@ exports.TopicModel = nsclient.model("topics", {
 });
 
 exports.ReplyModel = nsclient.model("replies", {
-    id: nonosql.NUMBER,
+    _id: nonosql.NUMBER,
     topic_id: nonosql.NUMBER,
     user_id: nonosql.NUMBER
 });

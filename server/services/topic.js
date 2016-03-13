@@ -3,9 +3,12 @@ var config = require('config');
 var common = require('./common');
 
 function dumpReplyDetail(data, user_map) {
-    var reply = _.pick(data, 'id', 'content', 'create_date');
-    reply.creator = common.dumpUserSimple(user_map[data.user_id]);
-    return reply;
+    return {
+        id: data._id,
+        content: data.content,
+        create_date: data.create_data,
+        creator: common.dumpUserSimple(user_map[data.user_id])
+    };
 }
 
 exports.topic_create = function(req, res) {

@@ -31,8 +31,8 @@ function findUser(key, value, callback) {
     });
 }
 
-function findUserById(id, callback) {
-    findUser('id', id, function(err, user) {
+function findUserById(user_id, callback) {
+    findUser('_id', user_id, function(err, user) {
         if (err)
             callback(brcx.errDBAccess(err));
         else if (!user)
@@ -45,13 +45,13 @@ function findUserById(id, callback) {
 exports.findUserByKV = findUser;
 exports.findUserById = findUserById;
 
-exports.findUsersById = function(ids, callback) {
-    if (ids.length < 1)
+exports.findUsersById = function(user_ids, callback) {
+    if (user_ids.length < 1)
         callback(null, {});
     else
         UserModel.find({
-            id: {
-                $in: ids
+            _id: {
+                $in: user_ids
             }
         }, function(err, rows) {
             if (err)
@@ -59,7 +59,7 @@ exports.findUsersById = function(ids, callback) {
             else {
                 var map = {};
                 _.each(rows, function(row) {
-                    map[row.id] = row;
+                    map[row._id] = row;
                 });
                 callback(null, map);
             }
@@ -70,8 +70,8 @@ function checkUserStatus(user, status) {
     return (user.status < status) || (user.status == status && (user.status_expire < 1 || user.status_expire < brcx.getTimestamp()));
 }
 
-exports.findUserAndCheckStatus = function(id, status, callback) {
-    findUserById(id, function(err, user) {
+exports.findUserAndCheckStatus = function(user_id, status, callback) {
+    findUserById(user_id, function(err, user) {
         if (err)
             callback(err);
         else if (!checkUserStatus(user, status))

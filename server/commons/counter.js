@@ -2,15 +2,19 @@ var _ = require('underscore');
 var datastore = require('../utils/datastore'),
     CounterModel = datastore.CounterModel;
 
-exports.COUNTER_USER = 1;
-exports.COUNTER_TOPIC = 2;
-exports.COUNTER_REPLY = 3;
+var COUNTER_USER = "users",
+    COUNTER_TOPIC = "topics",
+    COUNTER_REPLY = "replies";
+
+exports.COUNTER_USER = COUNTER_USER;
+exports.COUNTER_TOPIC = COUNTER_TOPIC;
+exports.COUNTER_REPLY = COUNTER_REPLY;
 
 exports.addCounter = function(id, callback, count) {
     if (!count)
         count = 1;
     CounterModel.update({
-        id: id
+        _id: id
     }, {
         $inc: {
             value: count
@@ -24,7 +28,11 @@ exports.addCounter = function(id, callback, count) {
 };
 
 exports.readCounters = function(callback) {
-    CounterModel.find({}, function(err, rows) {
+    CounterModel.find({
+        _id: {
+            $in: [COUNTER_USER, COUNTER_TOPIC, COUNTER_REPLY]
+        }
+    }, function(err, rows) {
         if (err)
             callback(brcx.errDBAccess(err));
         else {

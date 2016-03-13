@@ -8,7 +8,7 @@ var datastore = require('../utils/datastore'),
 
 function findTopicById(topic_id, callback) {
     TopicModel.find({
-        id: topic_id
+        _id: topic_id
     }, function(err, rows) {
         if (err)
             callback(brcx.errDBAccess(err));
@@ -70,17 +70,17 @@ exports.topic_create = function(user_id, node_id, title, content, callback) {
                 create_date: time,
                 update_date: time
             }, {
-                return: "id"
+                return: "_id"
             }, function(err, data) {
                 if (err)
                     nextcall(brcx.errDBAccess(err));
                 else
-                    nextcall(null, data.id);
+                    nextcall(null, data._id);
             });
         },
         function(topic_id, nextcall) {
             UserModel.update({
-                id: user_id
+                _id: user_id
             }, {
                 $inc: {
                     topic_count: 1,
@@ -131,7 +131,7 @@ exports.topic_list = function(node_id, otype, offset, limit, callback) {
             else
                 sort.update_date = -1;
             TopicModel.find(match, {
-                id: 1,
+                _id: 1,
                 node_id: 1,
                 user_id: 1,
                 title: 1,
@@ -190,7 +190,7 @@ exports.topic_move = function(user_id, topic_id, node_id, callback) {
                 nextcall(null, topic_id);
             else
                 TopicModel.update({
-                    id: topic_id
+                    _id: topic_id
                 }, {
                     node_id: node_id
                 }, function(err) {
@@ -242,17 +242,17 @@ exports.reply_create = function(user_id, topic_id, content, callback) {
                 content: content,
                 create_date: timestamp
             }, {
-                return: "id"
+                return: "_id"
             }, function(err, data) {
                 if (err)
                     nextcall(err);
                 else
-                    nextcall(null, topic, data.id);
+                    nextcall(null, topic, data._id);
             });
         },
         function(topic, reply_id, nextcall) {
             TopicModel.update({
-                id: topic_id
+                _id: topic_id
             }, {
                 $set: {
                     update_user_id: user_id,
@@ -270,7 +270,7 @@ exports.reply_create = function(user_id, topic_id, content, callback) {
         },
         function(topic, nextcall) {
             UserModel.update({
-                id: user_id
+                _id: user_id
             }, {
                 $inc: {
                     score: 0 - score
@@ -287,7 +287,7 @@ exports.reply_create = function(user_id, topic_id, content, callback) {
                 nextcall(null, topic);
             else
                 UserModel.update({
-                    id: topic.user_id
+                    _id: topic.user_id
                 }, {
                     $inc: {
                         score: score_reward
@@ -367,10 +367,16 @@ exports.user_topic_list = function(user_id, offset, limit, callback) {
         function(user, nextcall) {
             TopicModel.find({
                 user_id: user_id
-            }, [
-                "id", "node_id", "user_id", "title", "reply_count",
-                "create_date", "update_date", "update_user_id"
-            ]).sort({
+            }, {
+                _id: 1,
+                node_id: 1,
+                user_id: 1,
+                title: 1,
+                reply_count: 1,
+                create_date: 1,
+                update_date: 1,
+                update_user_id: 1
+            }).sort({
                 create_date: -1
             }).skip(offset).limit(limit).exec(function(err, rows) {
                 if (err)

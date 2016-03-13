@@ -11,8 +11,8 @@ function mkUKey(username) {
     return brcx.md5(asKey(username));
 }
 
-function findUserAndCheckStatus(id, callback) {
-    brcx.findUserAndCheckStatus(id, brcx.STATUS_NOLOGIN, function(err, user) {
+function findUserAndCheckStatus(user_id, callback) {
+    brcx.findUserAndCheckStatus(user_id, brcx.STATUS_NOLOGIN, function(err, user) {
         if (err)
             callback(err);
         else
@@ -79,14 +79,14 @@ exports.user_login = function(username, password, callback) {
     });
 };
 
-exports.user_detail = function(id, callback) {
-    brcx.findUserById(id, callback);
+exports.user_detail = function(user_id, callback) {
+    brcx.findUserById(user_id, callback);
 };
 
-exports.user_setting_profile = function(id, email, homepage, signature, callback) {
+exports.user_setting_profile = function(user_id, email, homepage, signature, callback) {
     async.waterfall([
         function(nextcall) {
-            findUserAndCheckStatus(id, function(err, user) {
+            findUserAndCheckStatus(user_id, function(err, user) {
                 if (err)
                     nextcall(err);
                 else
@@ -108,7 +108,7 @@ exports.user_setting_profile = function(id, email, homepage, signature, callback
         },
         function(nextcall) {
             UserModel.update({
-                id: id
+                _id: user_id
             }, {
                 email: asKey(email),
                 homepage: homepage,
@@ -121,15 +121,15 @@ exports.user_setting_profile = function(id, email, homepage, signature, callback
             });
         },
         function(nextcall) {
-            brcx.findUserById(id, nextcall);
+            brcx.findUserById(user_id, nextcall);
         }
     ], callback);
 };
 
-exports.user_setting_password = function(id, password, newpassword, callback) {
+exports.user_setting_password = function(user_id, password, newpassword, callback) {
     async.waterfall([
         function(nextcall) {
-            findUserAndCheckStatus(id, function(err, user) {
+            findUserAndCheckStatus(user_id, function(err, user) {
                 if (err)
                     nextcall(err);
                 else if (user.password != brcx.md5(password))
@@ -140,7 +140,7 @@ exports.user_setting_password = function(id, password, newpassword, callback) {
         },
         function(nextcall) {
             UserModel.update({
-                id: id
+                _id: user_id
             }, {
                 password: brcx.md5(newpassword)
             }, function(err) {
@@ -151,15 +151,15 @@ exports.user_setting_password = function(id, password, newpassword, callback) {
             });
         },
         function(nextcall) {
-            brcx.findUserById(id, nextcall);
+            brcx.findUserById(user_id, nextcall);
         }
     ], callback);
 };
 
-exports.user_setting_avatar = function(id, file, callback) {
+exports.user_setting_avatar = function(user_id, file, callback) {
     async.waterfall([
         function(nextcall) {
-            findUserAndCheckStatus(id, function(err) {
+            findUserAndCheckStatus(user_id, function(err) {
                 if (err)
                     nextcall(err);
                 else
@@ -176,7 +176,7 @@ exports.user_setting_avatar = function(id, file, callback) {
         },
         function(avatar_uri, nextcall) {
             UserModel.update({
-                id: id
+                _id: user_id
             }, {
                 avatar: avatar_uri
             }, function(err) {
@@ -187,7 +187,7 @@ exports.user_setting_avatar = function(id, file, callback) {
             });
         },
         function(nextcall) {
-            brcx.findUserById(id, nextcall);
+            brcx.findUserById(user_id, nextcall);
         }
     ], callback);
 };
@@ -210,7 +210,7 @@ exports.user_findpwd = function(username, email, callback) {
         function(user, time, nextcall) {
             var code = brcx.randomString(12);
             UserModel.update({
-                id: user.id
+                _id: user._id
             }, {
                 reset_code: code,
                 reset_date: time
@@ -223,7 +223,7 @@ exports.user_findpwd = function(username, email, callback) {
         },
         function(user, code, nextcall) {
             brcx.sendMail4FindPwd(user.email, brcx.encryptSafeData({
-                i: user.id,
+                i: user._id,
                 c: code,
                 t: brcx.getTimestamp()
             }), function(err) {
@@ -312,10 +312,10 @@ exports.user_active = function(id, callback) {
     ], callback);
 };
 
-exports.user_modify_status = function(id, status, status_expire, callback) {
+exports.user_modify_status = function(user_id, status, status_expire, callback) {
     async.waterfall([
         function(nextcall) {
-            brcx.findUserById(id, function(err, user) {
+            brcx.findUserById(user_id, function(err, user) {
                 if (err)
                     nextcall(err);
                 else
@@ -324,7 +324,7 @@ exports.user_modify_status = function(id, status, status_expire, callback) {
         },
         function(user, nextcall) {
             UserModel.update({
-                id: id
+                _id: user_id
             }, {
                 status: status,
                 status_expire: status_expire
@@ -332,7 +332,7 @@ exports.user_modify_status = function(id, status, status_expire, callback) {
                 if (err)
                     nextcall(brcx.errDBAccess(err));
                 else
-                    nextcall(null, id);
+                    nextcall(null);
             });
         }
     ], callback);

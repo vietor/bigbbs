@@ -4,23 +4,37 @@ function dumpUserSimple(data) {
     if (!data)
         return {};
     else
-        return _.pick(data, 'id', 'username', 'avatar');
+        return {
+            id: data._id,
+            username: data.username,
+            avatar: data.avatar
+        };
 }
 
 exports.dumpUserSimple = dumpUserSimple;
 
 function dumpTopicDetail(data, user_map) {
-    var topic = _.pick(data, 'id', 'title', 'content', 'create_date', 'reply_count', 'update_date');
-    topic.creator = dumpUserSimple(user_map[data.user_id]);
-    topic.node = brcx.findNode(data.node_id);
-    return topic;
+    return {
+        id: data._id,
+        title: data.title,
+        content: data.content,
+        create_date: data.create_date,
+        reply_count: data.reply_count,
+        update_date: data.update_date,
+        creator: dumpUserSimple(user_map[data.user_id]),
+        node: brcx.findNode(data.node_id)
+    };
 }
 
 function dumpTopicList(datas, user_map) {
     return _.map(datas, function(data) {
-        var topic = _.pick(data, 'id', 'title', 'create_date', 'reply_count');
-        topic.creator = dumpUserSimple(user_map[data.user_id]);
-        topic.node = brcx.findNode(data.node_id);
+        var topic = {
+            id: data._id,
+            title: data.title,
+            create_date: data.create_date,
+            reply_count: data.reply_count,
+            creator: dumpUserSimple(user_map[data.user_id])
+        };
         if (data.update_user_id > 0)
             topic.update_creator = dumpUserSimple(user_map[data.update_user_id]);
         return topic;
@@ -29,6 +43,12 @@ function dumpTopicList(datas, user_map) {
 
 exports.dumpTopicList = dumpTopicList;
 exports.dumpTopicDetail = dumpTopicDetail;
+
+exports.dumpUserDetail = function(data) {
+    return _.extend(data, {
+        id: data._id,
+    });
+};
 
 exports.getReqNode = function(req) {
     var node_id = parseInt(req.param('node_id', '0'));
