@@ -4,12 +4,21 @@
     "bind": "",
     "port": 4000,
     "store": {
-        "pg": {
-            "host": "127.0.0.1",
-            "port": 5432,
-            "database": "forum1",
-            "user": "vietor",
-            "password": ""
+        "db": {
+            "type": "pgsql",
+            "pgsql": {
+                "host": "127.0.0.1",
+                "port": 5432,
+                "database": "forum1",
+                "user": "vietor",
+                "password": ""
+            },
+            "mysql": {
+                "host": "localhost",
+                "user": "root",
+                "password": "",
+                "database": "forum1"
+            }
         },
         "redis": {
             "host": "127.0.0.1",

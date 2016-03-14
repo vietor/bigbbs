@@ -1,7 +1,7 @@
 var config = require('config');
 var nonosql = require('./nonosql');
 
-var nsclient = nonosql.connect('pgsql', config.store.pg);
+var nsclient = nonosql.connect(config.store.db.type, config.store.db[config.store.db.type]);
 
 exports.CounterModel = nsclient.model("counters", {
     _id: nonosql.STRING,
@@ -19,11 +19,13 @@ exports.TopicModel = nsclient.model("topics", {
     update_user_id: {
         type: nonosql.NUMBER,
         default: 0
-    }
+    },
+    create_date: nonosql.NUMBER
 });
 
 exports.ReplyModel = nsclient.model("replies", {
     _id: nonosql.NUMBER,
     topic_id: nonosql.NUMBER,
-    user_id: nonosql.NUMBER
+    user_id: nonosql.NUMBER,
+    create_date: nonosql.NUMBER
 });
