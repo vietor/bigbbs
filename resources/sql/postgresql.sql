@@ -1,7 +1,7 @@
 
 CREATE TABLE counters
 (
-  _id varchar(64) NOT NULL,
+  _id character varying(64) NOT NULL,
   value bigint,
   CONSTRAINT "PK_counters" PRIMARY KEY (_id)
 );

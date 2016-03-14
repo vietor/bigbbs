@@ -38,7 +38,7 @@ exports.readCounters = function(callback) {
         else {
             var counters = {};
             _.each(rows, function(row) {
-                counters[row.id] = row.value;
+                counters[row._id] = row.value;
             });
             callback(null, counters);
         }

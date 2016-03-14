@@ -6,7 +6,7 @@ function dumpReplyDetail(data, user_map) {
     return {
         id: data._id,
         content: data.content,
-        create_date: data.create_data,
+        create_date: data.create_date,
         creator: common.dumpUserSimple(user_map[data.user_id])
     };
 }

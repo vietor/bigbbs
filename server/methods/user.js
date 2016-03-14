@@ -291,7 +291,7 @@ exports.user_active = function(id, callback) {
                 if (timestamp - user.active_date < brcx.ACTIVE_INTERVAL)
                     days = user.active_days + 1;
                 UserModel.update({
-                    id: id
+                    _id: id
                 }, {
                     $set: {
                         active_date: timestamp,
