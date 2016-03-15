@@ -49,17 +49,13 @@ function Transfer(fields) {
     };
 }
 
-function Query(executor) {
-    var _query = null;
+function Query(query, executor) {
+    var _query = query;
     var _fields = null;
     var _sort = null;
     var _offset = -1;
     var _limit = -1;
 
-    this.match = function(query) {
-        _query = query;
-        return this;
-    };
     this.select = function(fields) {
         _fields = fields;
         return this;
@@ -83,20 +79,18 @@ function Query(executor) {
 }
 
 function ModelShell(executor) {
-    this.find = function(match, select, callback) {
+    this.find = function(query, fields, callback) {
         if (typeof select == 'function') {
-            callback = select;
-            select = null;
+            callback = fields;
+            fields = null;
         }
-        var query = new Query(executor);
-        if (match)
-            query.match(match);
-        if (select)
-            query.select(select);
+        var q = new Query(query, executor);
+        if (fields)
+            q.select(fields);
         if (callback)
-            query.exec(callback);
+            q.exec(callback);
         else
-            return query;
+            return q;
     };
     this.insert = function(fields, options, callback) {
         if (typeof options == 'function') {
@@ -105,15 +99,15 @@ function ModelShell(executor) {
         }
         executor.insert(fields, options || {}, callback);
     };
-    this.update = function(match, fields, options, callback) {
+    this.update = function(query, fields, options, callback) {
         if (typeof options == 'function') {
             callback = options;
             options = null;
         }
-        executor.update(match, fields, options || {}, callback);
+        executor.update(query, fields, options || {}, callback);
     };
-    this.remove = function(match, callback) {
-        executor.remove(match, callback);
+    this.remove = function(query, callback) {
+        executor.remove(query, callback);
     };
 }
 
@@ -245,14 +239,14 @@ function PgSQLProxy(params) {
                 parameters.push(value);
             });
             sql += ' (' + columns.join(',') + ') VALUES(' + indexs.join(',') + ')';
-            if (options.return)
-                sql += ' RETURNING ' + options.return;
+            if (options.id)
+                sql += ' RETURNING ' + options.id;
             execSQL(sql, parameters, function(err, result) {
                 if (err)
                     callback(err);
                 else {
                     var value = null;
-                    if (options.return)
+                    if (options.id)
                         value = transfer.exec(result.rows[0]);
                     callback(null, value);
                 }
@@ -448,11 +442,11 @@ function MySQLProxy(params) {
                 if (err)
                     callback(err);
                 else {
-                    if (!options.return)
+                    if (!options.id)
                         callback(null, null);
                     else {
                         var value = {};
-                        value[options.return] = result.insertId;
+                        value[options.id] = result.insertId;
                         callback(null, transfer.exec(value));
                     }
                 }

@@ -70,7 +70,7 @@ exports.topic_create = function(user_id, node_id, title, content, callback) {
                 create_date: time,
                 update_date: time
             }, {
-                return: "_id"
+                id: "_id"
             }, function(err, data) {
                 if (err)
                     nextcall(brcx.errDBAccess(err));
@@ -242,7 +242,7 @@ exports.reply_create = function(user_id, topic_id, content, callback) {
                 content: content,
                 create_date: timestamp
             }, {
-                return: "_id"
+                id: "_id"
             }, function(err, data) {
                 if (err)
                     nextcall(err);
