@@ -80,7 +80,7 @@ function Query(query, executor) {
 
 function ModelShell(executor) {
     this.find = function(query, fields, callback) {
-        if (typeof select == 'function') {
+        if (typeof fields == 'function') {
             callback = fields;
             fields = null;
         }
