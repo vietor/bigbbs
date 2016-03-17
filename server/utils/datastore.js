@@ -4,28 +4,28 @@ var bignosql = require('bignosql');
 var nsclient = bignosql.connect(config.store.db.type, config.store.db[config.store.db.type]);
 
 exports.CounterModel = nsclient.model("counters", {
-    _id: bignosql.STRING,
-    value: bignosql.NUMBER
+    _id: bignosql.String,
+    value: bignosql.Number
 });
 
 exports.UserModel = nsclient.model("users", {
-    _id: bignosql.NUMBER
+    _id: bignosql.Number
 });
 
 exports.TopicModel = nsclient.model("topics", {
-    _id: bignosql.NUMBER,
-    node_id: bignosql.NUMBER,
-    user_id: bignosql.NUMBER,
+    _id: bignosql.Number,
+    node_id: bignosql.Number,
+    user_id: bignosql.Number,
     update_user_id: {
-        type: bignosql.NUMBER,
+        type: bignosql.Number,
         default: 0
     },
-    create_date: bignosql.NUMBER
+    create_date: bignosql.Number
 });
 
 exports.ReplyModel = nsclient.model("replies", {
-    _id: bignosql.NUMBER,
-    topic_id: bignosql.NUMBER,
-    user_id: bignosql.NUMBER,
-    create_date: bignosql.NUMBER
+    _id: bignosql.Number,
+    topic_id: bignosql.Number,
+    user_id: bignosql.Number,
+    create_date: bignosql.Number
 });
