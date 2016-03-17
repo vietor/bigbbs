@@ -45,15 +45,25 @@ function findUserById(user_id, callback) {
 exports.findUserByKV = findUser;
 exports.findUserById = findUserById;
 
-exports.findUsersById = function(user_ids, callback) {
+exports.findUsersById = function(user_ids, callback, options) {
+    if (!options)
+        options = {};
     if (user_ids.length < 1)
         callback(null, {});
-    else
+    else {
+        var projection = null;
+        if (!options.fully)
+            projection = {
+                _id: 1,
+                username: 1,
+                avatar: 1,
+                role: 1
+            };
         UserModel.find({
             _id: {
                 $in: user_ids
             }
-        }, function(err, rows) {
+        }, projection, function(err, rows) {
             if (err)
                 callback(brcx.errDBAccess(err));
             else {
@@ -64,6 +74,7 @@ exports.findUsersById = function(user_ids, callback) {
                 callback(null, map);
             }
         });
+    }
 };
 
 function checkUserStatus(user, status) {

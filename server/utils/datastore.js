@@ -1,7 +1,9 @@
 var config = require('config');
 var bignosql = require('bignosql');
 
-var nsclient = bignosql.connect(config.store.db.type, config.store.db[config.store.db.type]);
+var nsclient = bignosql.connect(config.store.db.type, config.store.db[config.store.db.type], {
+    debug: config.debug
+});
 
 exports.CounterModel = nsclient.model("counters", {
     _id: bignosql.String,
