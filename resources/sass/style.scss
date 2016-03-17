@@ -9,20 +9,21 @@ html {
 }
 
 body {
+    background: #f7f7f7;
+
     padding-top: 60px;
-    background: #E7EAEC;
+    margin-bottom: 40px;
+
     font-size: 14px;
     font-family: "FontAwesome","Arial","Microsoft YaHei", "sans-serif";
-
-    margin-bottom: 40px;
 }
 
 .footer {
+    background: #333;
+
     position: absolute;
     bottom: 0;
     width: 100%;
-
-    background-color: #333;
 
     .container {
         padding: 0 15px;
