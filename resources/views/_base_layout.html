@@ -58,11 +58,9 @@
           {% endblock %}
         </div>
         <div class="col-md-4">
-          <div class="hidden-xs hidden-sm">
-            {% block sidebar %}
-            {% include "_sidebar_normal.html" %}
-            {% endblock %}
-          </div>
+          {% block sidebar %}
+          {% include "_sidebar_normal.html" %}
+          {% endblock %}
         </div>
         {% endblock %}
       </div>
@@ -71,7 +69,7 @@
     <footer class="footer navbar-default">
       <div class="container">
         <div class="row">
-	  <p class="text-muted">Copyright &#9400; {{webapp.site.name}} 2015-2016 All rights reserved. </p>
+          <p class="text-muted">Copyright &#9400; {{webapp.site.name}} 2015-2016 All rights reserved. </p>
         </div>
       </div>
     </footer>

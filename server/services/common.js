@@ -33,7 +33,8 @@ function dumpTopicList(datas, user_map) {
             title: data.title,
             create_date: data.create_date,
             reply_count: data.reply_count,
-            creator: dumpUserSimple(user_map[data.user_id])
+            creator: dumpUserSimple(user_map[data.user_id]),
+            node: brcx.findNode(data.node_id)
         };
         if (data.update_user_id > 0)
             topic.update_creator = dumpUserSimple(user_map[data.update_user_id]);
