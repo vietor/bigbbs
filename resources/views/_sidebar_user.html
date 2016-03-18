@@ -26,11 +26,11 @@
     <form accept-charset="UTF-8" action="/user/active" method="post">
       <input type="hidden" name="_csrf" value="{{csrf}}"/>
       <div class="row">
-        <div class="col-xs-4">
-          <button type="submit" name="upload" class="btn btn-success" {% if not can_active %}disabled{% endif %} >{% if can_active %}每日{% else %}已经{% endif %}签到</button>
+        <div class="col-xs-3">
+          <button type="submit" name="upload" class="btn btn-success btn-sm" {% if not can_active %}disabled{% endif %} >{% if can_active %}每日{% else %}已经{% endif %}签到</button>
         </div>
-        <div class="col-xs-8">
-          <h4 class="text-muted">{% if current_user.active_date > 0 %}{{current_user.active_date|tsbeforetext}},持续{{current_user.active_days}}天{% else %}从未签到{% endif %}</h4>
+        <div class="col-xs-9">
+          <a href="#" class="btn btn-sm disabled" role="button">{% if current_user.active_date > 0 %}{{current_user.active_date|tsbeforetext}},持续{{current_user.active_days}}天{% else %}从未签到{% endif %}</a>
         </div>
       </div>
     </form>
