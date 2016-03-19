@@ -11,7 +11,7 @@
       <p class="media-heading"><a href="/t/{{topic.id}}">{{topic.title}}</a></p>
       <p class="text-muted">
         {% if not current_node %}
-        <span><a href="/node/{{topic.node.id}}">{{topic.node.name}}</a></span>&nbsp;•&nbsp;
+        <span><a href="/go/{{topic.node.code}}">{{topic.node.name}}</a></span>&nbsp;•&nbsp;
         {% endif %}
         <span><a href="/u/{{topic.creator.id}}">{{topic.creator.username}}</a></span>&nbsp;•&nbsp;
         <span>{{topic.create_date|tsbeforetext}}</span>

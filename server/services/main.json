@@ -23,12 +23,12 @@
             ]
         },
         {
-            "url": "/node/:id",
+            "url": "/go/:code",
             "method": "GET,POST",
             "processor": "node"
         },
         {
-            "url": "/node/:id/recent",
+            "url": "/go/:code/recent",
             "method": "GET,POST",
             "processor": "node_recent",
             "parameters": [

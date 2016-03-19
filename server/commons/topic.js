@@ -12,6 +12,12 @@ exports.findNode = function(id) {
     });
 };
 
+exports.findNodeByCode = function(code) {
+    return _.find(nodes, function(row) {
+        return row.code == code;
+    });
+};
+
 exports.getPageOffset = function(page, pagesize) {
     if (page < 2)
         return 0;

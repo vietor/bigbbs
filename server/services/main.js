@@ -31,14 +31,13 @@ exports.home_recent = function(req, res) {
 };
 
 function validateNode(req, res, callback) {
-    var node_id = parseInt(req.param('id'));
-    if (!node_id)
+    var node = brcx.findNodeByCode(req.param('code'));
+    if (!node)
         res.redirect("/");
-    else if (node_id < 0 && !(req.session && req.session.login_user && req.session.login_user.role > 0))
+    else if (node.id < 0 && !(req.session && req.session.login_user && req.session.login_user.role > 0))
         common.sendAlter(res, "无访问此节点的权限");
-    else {
-        callback(node_id);
-    }
+    else
+        callback(node.id);
 }
 
 exports.node = function(req, res) {

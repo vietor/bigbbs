@@ -75,6 +75,7 @@
         },
         "node_trash": {
             "id": -1,
+            "code": "trash",
             "name": "垃圾节点"
         },
         "node_groups": [
@@ -83,10 +84,12 @@
                 "nodes": [
                     {
                         "id": 1,
+                        "code": "node1",
                         "name": "节点1"
                     },
                     {
                         "id": 2,
+                        "code": "node2",
                         "name": "节点2"
                     }
                 ]
@@ -96,10 +99,12 @@
                 "nodes": [
                     {
                         "id": 3,
+                        "code": "node3",
                         "name": "节点3"
                     },
                     {
                         "id": 4,
+                        "code": "node4",
                         "name": "节点4"
                     }
                 ]
