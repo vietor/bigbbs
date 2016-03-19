@@ -7,7 +7,7 @@ function asKey(text) {
     return text.toLowerCase();
 }
 
-function mkUKey(username) {
+function mkUserKey(username) {
     return brcx.md5(asKey(username));
 }
 
@@ -23,7 +23,7 @@ function findUserAndCheckStatus(user_id, callback) {
 exports.user_register = function(username, password, email, callback) {
     async.waterfall([
         function(nextcall) {
-            brcx.findUserByKV('ukey', mkUKey(username), function(err, user) {
+            brcx.findUserByKV('userkey', mkUserKey(username), function(err, user) {
                 if (err)
                     nextcall(err);
                 else if (user)
@@ -44,7 +44,7 @@ exports.user_register = function(username, password, email, callback) {
         },
         function(nextcall) {
             UserModel.insert({
-                ukey: mkUKey(username),
+                userkey: mkUserKey(username),
                 username: username,
                 password: brcx.md5(password),
                 email: asKey(email),
@@ -69,7 +69,7 @@ exports.user_register = function(username, password, email, callback) {
 };
 
 exports.user_login = function(username, password, callback) {
-    brcx.findUserByKVAndCheckStatus('ukey', mkUKey(username), brcx.STATUS_NOLOGIN, function(err, user) {
+    brcx.findUserByKVAndCheckStatus('userkey', mkUserKey(username), brcx.STATUS_NOLOGIN, function(err, user) {
         if (err)
             callback(err);
         else if (user.password != brcx.md5(password))
@@ -196,7 +196,7 @@ exports.user_findpwd = function(username, email, callback) {
     async.waterfall([
         function(nextcall) {
             var time = brcx.getTimestamp();
-            brcx.findUserByKVAndCheckStatus('ukey', mkUKey(username), brcx.STATUS_NOLOGIN, function(err, user) {
+            brcx.findUserByKVAndCheckStatus('userkey', mkUserKey(username), brcx.STATUS_NOLOGIN, function(err, user) {
                 if (err)
                     nextcall(err);
                 else if (user.email != asKey(email))

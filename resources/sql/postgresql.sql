@@ -22,7 +22,7 @@ CREATE TABLE users
   signature character varying(256),
   score bigint DEFAULT 0,
   role integer DEFAULT 0,
-  ukey character(32) NOT NULL,
+  userkey character(32) NOT NULL,
   avatar character varying(1024),
   topic_count bigint DEFAULT 0,
   reset_code character varying(512),
