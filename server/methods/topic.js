@@ -354,10 +354,10 @@ exports.topic_show = function(topic_id, page, pagesize, callback) {
     ], callback);
 };
 
-exports.user_topic_list = function(user_id, offset, limit, callback) {
+exports.user_topic_list = function(username, offset, limit, callback) {
     async.waterfall([
         function(nextcall) {
-            brcx.findUserById(user_id, function(err, user) {
+            brcx.findUserByKey(brcx.mkUserKey(username), function(err, user) {
                 if (err)
                     nextcall(err);
                 else
@@ -366,7 +366,7 @@ exports.user_topic_list = function(user_id, offset, limit, callback) {
         },
         function(user, nextcall) {
             TopicModel.find({
-                user_id: user_id
+                user_id: user._id
             }, {
                 _id: 1,
                 node_id: 1,
@@ -400,7 +400,7 @@ exports.user_topic_list = function(user_id, offset, limit, callback) {
                     if (err)
                         nextcall(err);
                     else {
-                        user_map[user_id] = user;
+                        user_map[user._id] = user;
                         nextcall(null, user, topics, user_map);
                     }
                 });

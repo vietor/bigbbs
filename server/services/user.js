@@ -111,7 +111,7 @@ exports.user_resetpwd_action = function(req, res) {
 };
 
 exports.user_show = function(req, res) {
-    brmx.user_topic_list(parseInt(req.param('id')), 0, config.limits.user_show_topics, function(err, user, topics, user_map) {
+    brmx.user_topic_list(req.param('username'), 0, config.limits.user_show_topics, function(err, user, topics, user_map) {
         if (err)
             common.sendAlter(res, err);
         else
@@ -125,7 +125,7 @@ exports.user_show = function(req, res) {
 
 exports.user_recent = function(req, res) {
     var page = parseInt(req.param('page'));
-    brmx.user_topic_list(parseInt(req.param('id')), common.getOffset(page, config.limits.topic_pagesize), config.limits.topic_pagesize, function(err, user, topics, user_map) {
+    brmx.user_topic_list(req.param('username'), common.getOffset(page, config.limits.topic_pagesize), config.limits.topic_pagesize, function(err, user, topics, user_map) {
         if (err)
             common.sendAlter(res, err);
         else

@@ -34,11 +34,11 @@
             <li><a href="/user/register">加入</a></li>
             {% else %}
             <li {% if navbar == 'topic_create' %} class="active" {% endif %}><a href="/topic/create">新发表</a></li>
-            <li {% if navbar == 'user_recent' %} class="active" {% endif %}><a href="/u/{{login_user.id}}/recent">我的发表</a></li>
+            <li {% if navbar == 'user_recent' %} class="active" {% endif %}><a href="/member/{{login_user.username}}/recent">我的发表</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class='glyphicon glyphicon-user'></span> {{login_user.username}} <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="/u/{{login_user.id}}">我的主页</a></li>
+                <li><a href="/member/{{login_user.username}}">我的主页</a></li>
                 <li><a href="/user/settings">我的账号</a></li>
                 <li class="divider"></li>
                 <li><a href="/user/logout">退出</a></li>

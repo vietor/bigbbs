@@ -9,7 +9,7 @@
       <h4>{{current_user.username}}</h4>
       <p class="text-muted">加入于:&nbsp;{{current_user.create_date|tsbeforetext}}</p>
       <p class="text-muted">现状态:&nbsp;{{current_user.status|kvmap(['正常','禁止发声','禁止进入'])}}{% if current_user.status_expire > 0 %},&nbsp;直到&nbsp;{{current_user.status_expire|tstext}}{% endif %}</p>
-      <p><span class="label label-info">个人主页:</span>&nbsp;&nbsp;<a href="{{current_user.homepage}}">{{current_user.homepage}}</a></p>
+      <p><span class="label label-info">个人主页:</span>&nbsp;&nbsp;<a href="{{current_user.homepage}}" target="_blank">{{current_user.homepage}}</a></p>
       <p><span class="label label-info">个性签名:</span>&nbsp;&nbsp;{{current_user.signature}}</p>
     </div>
   </div>

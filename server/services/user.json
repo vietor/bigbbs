@@ -153,21 +153,25 @@
             }
         },
         {
-            "url": "/u/:id",
+            "url": "/member/:username",
             "method": "GET",
             "processor": "user_show",
             "parameters": [
                 {
-                    "name": "id",
-                    "digit": true
+                    "name": "username",
+                    "regexp": "^[a-zA-Z0-9]{6,32}$"
                 }
             ]
         },
         {
-            "url": "/u/:id/recent",
+            "url": "/member/:username/recent",
             "method": "GET",
             "processor": "user_recent",
             "parameters": [
+                {
+                    "name": "username",
+                    "regexp": "^[a-zA-Z0-9]{6,32}$"
+                },
                 {
                     "name": "page",
                     "default": 1,
