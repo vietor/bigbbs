@@ -3,51 +3,38 @@ var config = require('config');
 var datastore = require('../utils/datastore'),
     UserModel = datastore.UserModel;
 
-function asKey(text) {
-    return text.toLowerCase();
-}
-
-function mkUserKey(username) {
-    return brcx.md5(asKey(username));
-}
-
-function findUserAndCheckStatus(user_id, callback) {
-    brcx.findUserAndCheckStatus(user_id, brcx.STATUS_NOLOGIN, function(err, user) {
-        if (err)
-            callback(err);
-        else
-            callback(null, user);
-    });
-}
-
 exports.user_register = function(username, password, email, callback) {
     async.waterfall([
         function(nextcall) {
-            brcx.findUserByKV('userkey', mkUserKey(username), function(err, user) {
+            brcx.findUserByKey(brcx.mkUserKey(username), function(err, user) {
                 if (err)
                     nextcall(err);
                 else if (user)
                     nextcall(brcx.errAlreadyExistsUser());
                 else
                     nextcall(null);
+            }, {
+                required: false
             });
         },
         function(nextcall) {
-            brcx.findUserByKV('email', asKey(email), function(err, user) {
+            brcx.findUserByEmail(brcx.mkUserEmail(email), function(err, user) {
                 if (err)
                     nextcall(err);
                 else if (user)
                     nextcall(brcx.errAlreadyExistsEmail());
                 else
                     nextcall(null);
+            }, {
+                required: false
             });
         },
         function(nextcall) {
             UserModel.insert({
-                userkey: mkUserKey(username),
+                userkey: brcx.mkUserKey(username),
                 username: username,
                 password: brcx.md5(password),
-                email: asKey(email),
+                email: brcx.mkUserEmail(email),
                 score: config.limits.score.user_create,
                 create_date: brcx.getTimestamp()
             }, function(err) {
@@ -69,13 +56,15 @@ exports.user_register = function(username, password, email, callback) {
 };
 
 exports.user_login = function(username, password, callback) {
-    brcx.findUserByKVAndCheckStatus('userkey', mkUserKey(username), brcx.STATUS_NOLOGIN, function(err, user) {
+    brcx.findUserByKey(brcx.mkUserKey(username), function(err, user) {
         if (err)
             callback(err);
         else if (user.password != brcx.md5(password))
             callback(brcx.errInvalidUserOrPwd());
         else
             callback(null, user);
+    }, {
+        status: brcx.STATUS_NOLOGIN
     });
 };
 
@@ -86,31 +75,35 @@ exports.user_detail = function(user_id, callback) {
 exports.user_setting_profile = function(user_id, email, homepage, signature, callback) {
     async.waterfall([
         function(nextcall) {
-            findUserAndCheckStatus(user_id, function(err, user) {
+            brcx.findUserById(user_id, function(err, user) {
                 if (err)
                     nextcall(err);
                 else
                     nextcall(null, user);
+            }, {
+                status: brcx.STATUS_NOLOGIN
             });
         },
         function(user, nextcall) {
             if (user.email == email)
                 nextcall(null);
             else
-                brcx.findUserByKV('email', asKey(email), function(err, user) {
+                brcx.findUserByEmail(brcx.mkUserEmail(email), function(err, user) {
                     if (err)
                         nextcall(err);
                     else if (user)
                         nextcall(brcx.errAlreadyExistsEmail());
                     else
                         nextcall(null);
+                }, {
+                    required: false
                 });
         },
         function(nextcall) {
             UserModel.update({
                 _id: user_id
             }, {
-                email: asKey(email),
+                email: brcx.mkUserEmail(email),
                 homepage: homepage,
                 signature: signature
             }, function(err) {
@@ -129,13 +122,15 @@ exports.user_setting_profile = function(user_id, email, homepage, signature, cal
 exports.user_setting_password = function(user_id, password, newpassword, callback) {
     async.waterfall([
         function(nextcall) {
-            findUserAndCheckStatus(user_id, function(err, user) {
+            brcx.findUserById(user_id, function(err, user) {
                 if (err)
                     nextcall(err);
                 else if (user.password != brcx.md5(password))
                     nextcall(brcx.errInvalidPwd());
                 else
                     nextcall(null);
+            }, {
+                status: brcx.STATUS_NOLOGIN
             });
         },
         function(nextcall) {
@@ -159,11 +154,13 @@ exports.user_setting_password = function(user_id, password, newpassword, callbac
 exports.user_setting_avatar = function(user_id, file, callback) {
     async.waterfall([
         function(nextcall) {
-            findUserAndCheckStatus(user_id, function(err) {
+            brcx.findUserById(user_id, function(err) {
                 if (err)
                     nextcall(err);
                 else
                     nextcall(null);
+            }, {
+                status: brcx.STATUS_NOLOGIN
             });
         },
         function(nextcall) {
@@ -196,15 +193,17 @@ exports.user_findpwd = function(username, email, callback) {
     async.waterfall([
         function(nextcall) {
             var time = brcx.getTimestamp();
-            brcx.findUserByKVAndCheckStatus('userkey', mkUserKey(username), brcx.STATUS_NOLOGIN, function(err, user) {
+            brcx.findUserByKey(brcx.mkUserKey(username), function(err, user) {
                 if (err)
                     nextcall(err);
-                else if (user.email != asKey(email))
+                else if (user.email != brcx.mkUserEmail(email))
                     nextcall(brcx.errInvalidEmailOwner());
                 else if (time - user.reset_date < config.limits.second_of_findpwd)
                     nextcall(brcx.errBusyForFindPwd());
                 else
                     nextcall(null, user, time);
+            }, {
+                status: brcx.STATUS_NOLOGIN
             });
         },
         function(user, time, nextcall) {

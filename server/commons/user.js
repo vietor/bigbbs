@@ -8,9 +8,18 @@ exports.ACTIVE_INTERVAL = SECONDS_OF_DAY * 2;
 
 exports.ROLE_NORMAL = 0;
 exports.ROLE_MANAGER = 1;
+
 exports.STATUS_NORMAL = 0;
 exports.STATUS_NOVOICE = 1;
 exports.STATUS_NOLOGIN = 2;
+
+exports.mkUserKey = function(username) {
+    return brcx.md5(username.toLowerCase());
+};
+
+exports.mkUserEmail = function(text) {
+    return text.toLowerCase();
+};
 
 exports.isActiveAble = function(active_date, timestamp) {
     if (!timestamp)
@@ -18,32 +27,49 @@ exports.isActiveAble = function(active_date, timestamp) {
     return parseInt(active_date) + SECONDS_OF_DAY < timestamp;
 };
 
-function findUser(key, value, callback) {
-    var match = {};
-    match[key] = value;
-    UserModel.find(match, function(err, rows) {
-        if (err)
-            callback(brcx.errDBAccess(err));
-        else if (rows.length < 1)
-            callback(null, null);
-        else
-            callback(null, rows[0]);
-    });
+function validateStatus(user, status) {
+    return (user.status < status) || (user.status == status && (user.status_expire < 1 || user.status_expire < brcx.getTimestamp()));
 }
 
-function findUserById(user_id, callback) {
-    findUser('_id', user_id, function(err, user) {
+function processFindUser(options, callback) {
+    if (!options)
+        options = {};
+    return function(err, rows) {
         if (err)
             callback(brcx.errDBAccess(err));
-        else if (!user)
-            callback(brcx.errNotFoundUser());
-        else
-            callback(null, user);
-    });
+        else if (rows.length < 1) {
+            if (!!!options.required)
+                callback(null, null);
+            else
+                callback(brcx.errNotFoundUser());
+        } else {
+            var user = rows[0];
+            if (typeof options.status != 'number' || validateStatus(user, options.status))
+                callback(null, user);
+            else
+                callback(brcx.errStatusLimited());
+        }
+    };
 }
 
-exports.findUserByKV = findUser;
-exports.findUserById = findUserById;
+exports.findUserById = function(id, callback, options) {
+    UserModel.find({
+        _id: id
+    }, processFindUser(options, callback));
+};
+
+exports.findUserByKey = function(userkey, callback, options) {
+    UserModel.find({
+        userkey: userkey
+    }, processFindUser(options, callback));
+};
+
+exports.findUserByEmail = function(email, callback, options) {
+    UserModel.find({
+        email: email
+    }, processFindUser(options, callback));
+};
+
 
 exports.findUsersById = function(user_ids, callback, options) {
     if (!options)
@@ -75,32 +101,4 @@ exports.findUsersById = function(user_ids, callback, options) {
             }
         });
     }
-};
-
-function checkUserStatus(user, status) {
-    return (user.status < status) || (user.status == status && (user.status_expire < 1 || user.status_expire < brcx.getTimestamp()));
-}
-
-exports.findUserAndCheckStatus = function(user_id, status, callback) {
-    findUserById(user_id, function(err, user) {
-        if (err)
-            callback(err);
-        else if (!checkUserStatus(user, status))
-            callback(brcx.errStatusLimited());
-        else
-            callback(null, user);
-    });
-};
-
-exports.findUserByKVAndCheckStatus = function(key, value, status, callback) {
-    findUser(key, value, function(err, user) {
-        if (err)
-            callback(err);
-        else if (!user)
-            callback(brcx.errNotFoundUser());
-        else if (!checkUserStatus(user, status))
-            callback(brcx.errStatusLimited());
-        else
-            callback(null, user);
-    });
 };
