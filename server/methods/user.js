@@ -64,7 +64,7 @@ exports.user_login = function(username, password, callback) {
         else
             callback(null, user);
     }, {
-        status: brcx.STATUS_NOLOGIN
+        status: brcx.STATUS_NORMAL
     });
 };
 
@@ -81,7 +81,7 @@ exports.user_setting_profile = function(user_id, email, homepage, signature, cal
                 else
                     nextcall(null, user);
             }, {
-                status: brcx.STATUS_NOLOGIN
+                status: brcx.STATUS_NORMAL
             });
         },
         function(user, nextcall) {
@@ -130,7 +130,7 @@ exports.user_setting_password = function(user_id, password, newpassword, callbac
                 else
                     nextcall(null);
             }, {
-                status: brcx.STATUS_NOLOGIN
+                status: brcx.STATUS_NORMAL
             });
         },
         function(nextcall) {
@@ -160,7 +160,7 @@ exports.user_setting_avatar = function(user_id, file, callback) {
                 else
                     nextcall(null);
             }, {
-                status: brcx.STATUS_NOLOGIN
+                status: brcx.STATUS_NORMAL
             });
         },
         function(nextcall) {
@@ -203,7 +203,7 @@ exports.user_findpwd = function(username, email, callback) {
                 else
                     nextcall(null, user, time);
             }, {
-                status: brcx.STATUS_NOLOGIN
+                status: brcx.STATUS_NORMAL
             });
         },
         function(user, time, nextcall) {
@@ -311,7 +311,7 @@ exports.user_active = function(id, callback) {
     ], callback);
 };
 
-exports.user_modify_status = function(user_id, status, status_expire, callback) {
+exports.user_modify_status = function(user_id, status, callback) {
     async.waterfall([
         function(nextcall) {
             brcx.findUserById(user_id, function(err, user) {
@@ -325,13 +325,12 @@ exports.user_modify_status = function(user_id, status, status_expire, callback) 
             UserModel.update({
                 _id: user_id
             }, {
-                status: status,
-                status_expire: status_expire
+                status: status
             }, function(err) {
                 if (err)
                     nextcall(brcx.errDBAccess(err));
                 else
-                    nextcall(null);
+                    nextcall(null, user);
             });
         }
     ], callback);

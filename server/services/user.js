@@ -203,30 +203,18 @@ exports.user_active_action = function(req, res) {
 };
 
 exports.user_manage_status_action = function(req, res) {
-    var status = 0,
-        status_expire = 0;
-    var timestamp = brcx.getTimestamp();
+    var status = brcx.STATUS_NORMAL;
     switch (parseInt(req.param('action'))) {
         case 2:
-            status = 1;
-            status_expire = timestamp + 24 * 3600;
-            break;
-        case 3:
-            status = 2;
-            status_expire = timestamp + 24 * 3600;
-            break;
-        case 4:
-            status = 1;
-            break;
-        case 5:
-            status = 2;
-            break;
+            {
+                status = brcx.STATUS_DISABLE;
+                break;
+            }
     }
-    var user_id = parseInt(req.param('user_id'));
-    brmx.user_modify_status(user_id, status, status_expire, function(err) {
+    brmx.user_modify_status(parseInt(req.param('user_id')), status, function(err, user) {
         if (err)
             common.sendAlter(res, err);
         else
-            res.redirect("/u/" + user_id);
+            res.redirect("/member/" + user.username);
     });
 };

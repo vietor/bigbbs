@@ -10,8 +10,7 @@ exports.ROLE_NORMAL = 0;
 exports.ROLE_MANAGER = 1;
 
 exports.STATUS_NORMAL = 0;
-exports.STATUS_NOVOICE = 1;
-exports.STATUS_NOLOGIN = 2;
+exports.STATUS_DISABLE = 0;
 
 exports.mkUserKey = function(username) {
     return brcx.md5(username.toLowerCase());
@@ -27,10 +26,6 @@ exports.isActiveAble = function(active_date, timestamp) {
     return parseInt(active_date) + SECONDS_OF_DAY < timestamp;
 };
 
-function validateStatus(user, status) {
-    return (user.status < status) || (user.status == status && (user.status_expire < 1 || user.status_expire < brcx.getTimestamp()));
-}
-
 function processFindUser(options, callback) {
     if (!options)
         options = {};
@@ -44,7 +39,7 @@ function processFindUser(options, callback) {
                 callback(brcx.errNotFoundUser());
         } else {
             var user = rows[0];
-            if (typeof options.status != 'number' || validateStatus(user, options.status))
+            if (typeof options.status != 'number' || options.status == user.status)
                 callback(null, user);
             else
                 callback(brcx.errStatusLimited());

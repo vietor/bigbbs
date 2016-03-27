@@ -19,14 +19,16 @@ function findTopicById(topic_id, callback) {
     });
 }
 
-function findUserAndCheckScore(user_id, score, callback) {
-    brcx.findUserAndCheckStatus(user_id, brcx.STATUS_NOVOICE, function(err, user) {
+function findAndCheckUser(user_id, score, callback) {
+    brcx.findUserById(user_id, function(err, user) {
         if (err)
             callback(err);
         else if (user.score < score)
             callback(brcx.errScoreNotEnouth());
         else
             callback(null, user);
+    }, {
+        status: brcx.STATUS_NORMAL
     });
 }
 
@@ -53,7 +55,7 @@ exports.topic_create = function(user_id, node_id, title, content, callback) {
             });
         },
         function(nextcall) {
-            findUserAndCheckScore(user_id, score, function(err) {
+            findAndCheckUser(user_id, score, function(err) {
                 if (err)
                     nextcall(err);
                 else
@@ -228,7 +230,7 @@ exports.reply_create = function(user_id, topic_id, content, callback) {
             });
         },
         function(topic, nextcall) {
-            findUserAndCheckScore(user_id, score, function(err) {
+            findAndCheckUser(user_id, score, function(err) {
                 if (err)
                     nextcall(err);
                 else

@@ -17,13 +17,13 @@
   </div>
   <div class="panel-footer clearfix">
     {% if login_user && login_user.role > 0 %}
-    <span class="pull-right manager-options">
+    <div class="pull-right manager-options">
       <form accept-charset="UTF-8" action="/topic/move" method="post" data-toggle="validator" role="form">
         <input type="hidden" name="_csrf" value="{{csrf}}"/>
         <input name="topic_id" id="topic_id" type="hidden" value="{{topic.id}}" />
         <div class="row">
           <div class="col-xs-4">
-            <button type="submit" class="btn btn-primary">移动到</button>
+            <button type="submit" class="btn btn-primary">移到</button>
           </div>
           <div class="col-xs-8">
             <select name="node_id" id="node_id" class="form-control" required>
@@ -39,7 +39,7 @@
           </div>
         </div>
       </form>
-    </span>
+    </div>
     {% endif %}
   </div>
 </div>

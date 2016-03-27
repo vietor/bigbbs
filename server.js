@@ -34,6 +34,7 @@ bigcluster(config.cpu, function() {
             uploadSize: 4 * 1024 * 1024
         },
         viewer: {
+            cache: false,
             render: swig.renderFile,
             filepath: path.join(__dirname, "resources", "views")
         },
@@ -51,13 +52,15 @@ bigcluster(config.cpu, function() {
         ]
     };
 
-    swig.setDefaults({
-        cache: !opts.debug,
+    var swigDefaults = {
         locals: {
             webapp: config.webapp,
             limits: config.limits
         }
-    });
+    };
+    if (opts.debug)
+        swigDefaults.cache = false;
+    swig.setDefaults(swigDefaults);
 
     function tstext(timestamp) {
         var date = new Date(timestamp * 1000);
