@@ -10,7 +10,7 @@ exports.ROLE_NORMAL = 0;
 exports.ROLE_MANAGER = 1;
 
 exports.STATUS_NORMAL = 0;
-exports.STATUS_DISABLE = 0;
+exports.STATUS_DISABLE = 1;
 
 exports.mkUserKey = function(username) {
     return brcx.md5(username.toLowerCase());

@@ -30,6 +30,7 @@ CREATE TABLE users
   active_date bigint DEFAULT 0,
   active_days integer DEFAULT 0,
   status integer DEFAULT 0,
+  status_date bigint DEFAULT 0,
   PRIMARY KEY PK_users (_id)
 );
 

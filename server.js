@@ -63,8 +63,9 @@ bigcluster(config.cpu, function() {
     swig.setDefaults(swigDefaults);
 
     function tstext(timestamp) {
-        var date = new Date(timestamp * 1000);
-        return util.format('%d-%d-%d %d:%d:%d', date.getFullYear(), date.getMonth() + 1, date.getDay(), date.getHours(), date.getMinutes(), date.getSeconds());
+        var o = new Date(timestamp * 1000);
+        return o.getFullYear() + (o.getMonth() < 9 ? "-0" : "-") + (o.getMonth() + 1) + (o.getDate() < 10 ? "-0" : "-") + o.getDate() +
+            "" + (o.getHours() < 10 ? ":0" : ":") + o.getHours() + (o.getMinutes() < 10 ? ":0" : ":") + o.getMinutes() + (o.getSeconds() < 10 ? ":0" : ":") + o.getSeconds();
     }
 
     swig.setFilter('tstext', tstext);
@@ -79,7 +80,7 @@ bigcluster(config.cpu, function() {
             return Math.floor(distance / 3600) + '小时前';
         if (distance < 432000)
             return Math.floor(distance / 86400) + '天前';
-        return tstext(timestamp);
+        return tstext(timestamp).substring(0, 10);
     });
     swig.setFilter('avatar', function(avatar_uri) {
         var raw_url = "";

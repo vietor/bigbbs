@@ -322,16 +322,20 @@ exports.user_modify_status = function(user_id, status, callback) {
             });
         },
         function(user, nextcall) {
-            UserModel.update({
-                _id: user_id
-            }, {
-                status: status
-            }, function(err) {
-                if (err)
-                    nextcall(brcx.errDBAccess(err));
-                else
-                    nextcall(null, user);
-            });
+            if (status == user.status)
+                nextcall(null, user);
+            else
+                UserModel.update({
+                    _id: user_id
+                }, {
+                    status: status,
+                    status_date: brcx.getTimestamp()
+                }, function(err) {
+                    if (err)
+                        nextcall(brcx.errDBAccess(err));
+                    else
+                        nextcall(null, user);
+                });
         }
     ], callback);
 };
