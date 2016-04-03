@@ -34,8 +34,8 @@
         "safekey": "resetpwd-safe-key",
         "avatar": {
             "type": "localfs",
+            "baseurl": "web base url",
             "params": {
-                "baseurl": "web base url",
                 "filepath": "store file path"
             }
         }

@@ -10,7 +10,7 @@ var uuid = require('node-uuid');
 var store_type = config.store.avatar.type;
 var store_params = config.store.avatar.params;
 
-if (!store_params || !_.contains(['localfs', 'qiniu'], store_type)) {
+if (!store_params || !_.contains(['localfs', 'qiniu', 'aliyun'], store_type)) {
     throw Error('Unsupported avatar store type');
 }
 
@@ -70,6 +70,39 @@ function storeQiniu(params, filename, filepath, callback) {
     });
 }
 
+function storeAliyun(params, filename, filepath, callback) {
+    if (!filename)
+        filename = path.basename(filepath);
+
+    var policy = {
+        "expiration": (new Date(Date.now() + 360000)).toISOString(),
+        "conditions": [{
+            key: filename
+        }]
+    };
+    var encodedPolicy = xbase64.encode(JSON.stringify(policy));
+    var encodedSign = xbase64.encode(hmac_sha1(encodedPolicy, params.accessKeySecret));
+    var formData = {
+        key: filename,
+        OSSAccessKeyId: params.accessKeyId,
+        policy: encodedPolicy,
+        Signature: encodedSign,
+        success_action_status: 200,
+        file: fs.createReadStream(filepath)
+    };
+    request.post({
+        url: params.url,
+        formData: formData
+    }, function(err, resp, body) {
+        if (err)
+            callback(err);
+        else if (resp.statusCode == 200)
+            callback(null);
+        else
+            callback(new Error('status: ' + resp.statusCode + ', error: ' + body));
+    });
+}
+
 exports.storeAvatar = function(origin_filepath, callback) {
     var filename = uuid.v1().replace(/-/g, '') + path.extname(origin_filepath);
     if (store_type == "localfs") {
@@ -83,6 +116,13 @@ exports.storeAvatar = function(origin_filepath, callback) {
         });
     } else if (store_type == "qiniu") {
         storeQiniu(store_params, filename, origin_filepath, function(err) {
+            if (err)
+                callback(brcx.errFSAccess(err));
+            else
+                callback(null, filename);
+        });
+    } else if (store_type == "aliyun") {
+        storeAliyun(store_params, filename, origin_filepath, function(err) {
             if (err)
                 callback(brcx.errFSAccess(err));
             else

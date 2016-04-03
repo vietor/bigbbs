@@ -2,7 +2,6 @@ var config = require('config');
 var bigcluster = require('bigcluster');
 
 bigcluster(config.cpu, function() {
-    var util = require('util');
     var path = require('path');
     var swig = require('swig'),
         marked = require('marked'),
@@ -85,10 +84,10 @@ bigcluster(config.cpu, function() {
     swig.setFilter('avatar', function(avatar_uri) {
         var raw_url = "";
         if (avatar_uri) {
-            if (!avatar.params.baseurl)
+            if (!avatar.baseurl)
                 raw_url = avatar_uri;
             else {
-                raw_url = avatar.params.baseurl + avatar_uri;
+                raw_url = avatar.baseurl + avatar_uri;
             }
         }
         return raw_url || "/images/avatar.png";
