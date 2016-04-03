@@ -19,12 +19,60 @@ BigBBS
 ## Redis
 2.6.12版本以上
 
-## PostgreSQL
+## 支持的数据库
+
+### PostgreSQL
 9.2版本以上
+
+### MySQL
+5.5版本及以上
 
 # 配置
 
 详见config/default.json中的说明。
+
+## 支持的avatar存储模式
+
+### localfs (本地存储)
+
+``` json
+{
+    "type": "localfs",
+    "baseurl": "访问URL",
+    "params": {
+        "filepath": "本地存放路径"
+    }
+}
+```
+
+### qiniu (七牛云)
+
+``` json
+{
+    "type": "qiniu",
+    "baseurl": "访问URL",
+    "params": {
+        "url": "http://upload.qiniu.com/",
+        "bucket": "bucket名",
+        "accessKey": "访问KEY（AK）",
+        "secretKey": "安全KEY（SK）"
+    }
+}
+```
+
+### aliyun (阿里云OSS)
+
+``` json
+{
+    "type": "aliyun",
+    "baseurl": "访问URL",
+    "params": {
+        "url": "bucket URL",
+        "accessKeyId": "Access Key ID",
+        "accessKeySecret": "Access Key Secret"
+    }
+}
+```
 
 # 开发
 
