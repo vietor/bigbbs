@@ -6,16 +6,19 @@ var datastore = require('../utils/datastore'),
 exports.user_register = function(username, password, email, callback) {
     async.waterfall([
         function(nextcall) {
-            brcx.findUserByKey(brcx.mkUserKey(username), function(err, user) {
-                if (err)
-                    nextcall(err);
-                else if (user)
-                    nextcall(brcx.errAlreadyExistsUser());
-                else
-                    nextcall(null);
-            }, {
-                required: false
-            });
+            if (!config.limits.active_join)
+                nextcall(brcx.errFeatureAccess());
+            else
+                brcx.findUserByKey(brcx.mkUserKey(username), function(err, user) {
+                    if (err)
+                        nextcall(err);
+                    else if (user)
+                        nextcall(brcx.errAlreadyExistsUser());
+                    else
+                        nextcall(null);
+                }, {
+                    required: false
+                });
         },
         function(nextcall) {
             brcx.findUserByEmail(brcx.mkUserEmail(email), function(err, user) {

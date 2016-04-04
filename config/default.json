@@ -52,6 +52,7 @@
         }
     },
     "limits": {
+        "active_join": true,
         "active_reply": true,
         "rate_of_create": 5,
         "topic_pagesize": 30,
