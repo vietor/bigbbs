@@ -33,7 +33,7 @@ CREATE TABLE users
   status_date bigint DEFAULT 0,
   CONSTRAINT "PK_users" PRIMARY KEY (_id),
   CONSTRAINT "UK_users_email" UNIQUE (email),
-  CONSTRAINT "UK_users_ukey" UNIQUE (ukey)
+  CONSTRAINT "UK_users_userkey" UNIQUE (userkey)
 );
 
 

@@ -35,7 +35,7 @@ CREATE TABLE users
 );
 
 CREATE UNIQUE INDEX UK_users_email ON users (email) USING BTREE;
-CREATE UNIQUE INDEX UK_users_ukey ON users (ukey) USING BTREE;
+CREATE UNIQUE INDEX UK_users_userkey ON users (userkey) USING BTREE;
 
 
 CREATE TABLE topics
