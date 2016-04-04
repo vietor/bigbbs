@@ -7,6 +7,7 @@ bigcluster(config.cpu, function() {
         marked = require('marked'),
         bigrest = require('bigrest'),
         csrf = require('csurf'),
+        redis = require('redis'),
         connredis = require('connect-redis');
 
     global.project_rootdir = path.resolve(__dirname);
@@ -40,7 +41,13 @@ bigcluster(config.cpu, function() {
         session: {
             secret: config.store.session.secret,
             store: function(session) {
-                return new(connredis(session))(config.store.session.redis);
+                return new(connredis(session))({
+                    client: redis.createClient(
+                        config.store.session.redis.port,
+                        config.store.session.redis.host,
+                        config.store.session.redis.options || {}
+                    )
+                });
             }
         },
         static: statics,
