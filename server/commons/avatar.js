@@ -8,7 +8,7 @@ var config = require('config');
 var uuid = require('node-uuid');
 
 var store_type = config.store.avatar.type;
-var store_params = config.store.avatar.params;
+var store_params = config.store.avatar[store_type];
 
 if (!store_params || !_.contains(['localfs', 'qiniu', 'aliyun'], store_type)) {
     throw Error('Unsupported avatar store type');

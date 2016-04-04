@@ -35,8 +35,19 @@
         "avatar": {
             "type": "localfs",
             "baseurl": "web base url",
-            "params": {
+            "localfs": {
                 "filepath": "store file path"
+            },
+            "qiniu": {
+                "url": "http://upload.qiniu.com/",
+                "bucket": "bucket名",
+                "accessKey": "访问KEY（AK）",
+                "secretKey": "安全KEY（SK）"
+            },
+            "aliyun": {
+                "url": "bucket URL",
+                "accessKeyId": "Access Key Id",
+                "accessKeySecret": "Access Key Secret"
             }
         }
     },

@@ -21,8 +21,8 @@ bigcluster(config.cpu, function() {
     }];
     if (avatar.type == 'localfs')
         statics.push({
-            urlpath: avatar.params.baseurl,
-            filepath: avatar.params.filepath
+            urlpath: avatar.baseurl,
+            filepath: avatar.localfs.filepath
         });
 
     var opts = {
