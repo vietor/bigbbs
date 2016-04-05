@@ -1,7 +1,11 @@
-var redis = require('redis');
+var ioredis = require('ioredis');
 var config = require('config');
 
-var client = redis.createClient(config.store.redis.port, config.store.redis.host, config.store.redis.options || {});
+var client = new ioredis(
+    config.store.redis.port,
+    config.store.redis.host,
+    config.store.redis.options || {}
+);
 
 function x_lock(key, timeout, callback) {
     client.set('lock:' + key, "locked", "ex", timeout, 'nx', function(err, res) {
