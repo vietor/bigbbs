@@ -16,15 +16,23 @@ bigcluster(config.cpu, function() {
     var bind = config.bind || "";
     var avatar = config.store.avatar;
 
+    var static_options = {};
+    if (!config.debug)
+        static_options = {
+            maxAge: '14d',
+        };
     var statics = [{
         urlpath: '/',
-        filepath: path.join(__dirname, "webroot")
+        filepath: path.join(__dirname, "webroot"),
+        options: static_options
     }];
-    if (avatar.type == 'localfs')
+    if (avatar.type == 'localfs') {
         statics.push({
             urlpath: avatar.baseurl,
-            filepath: avatar.localfs.filepath
+            filepath: avatar.localfs.filepath,
+            options: static_options
         });
+    }
 
     var opts = {
         debug: config.debug,
@@ -61,7 +69,8 @@ bigcluster(config.cpu, function() {
     var swigDefaults = {
         locals: {
             webapp: config.webapp,
-            limits: config.limits
+            limits: config.limits,
+            statics: config.statics
         }
     };
     if (opts.debug)

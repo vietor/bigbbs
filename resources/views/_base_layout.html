@@ -7,11 +7,11 @@
 
     <title>{{webapp.title}}</title>
     <link rel="icon" href="/favicon.ico">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css?v={{statics.version}}">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css?v={{statics.version}}">
+    <link rel="stylesheet" href="/css/font-awesome.min.css?v={{statics.version}}">
     {% block cssinit %}{% endblock %}
-    <link rel="stylesheet" href="/css/style.min.css">
+    <link rel="stylesheet" href="/css/style.min.css?v={{statics.version}}">
   </head>
   <body>
     <nav class="navbar navbar-default navbar-fixed-top">
@@ -76,8 +76,8 @@
       </div>
     </footer>
 
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.min.js?v={{statics.version}}"></script>
+    <script src="/js/bootstrap.min.js?v={{statics.version}}"></script>
     {% block jsinit %}{% endblock %}
   </body>
 </html>

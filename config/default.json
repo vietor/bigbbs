@@ -78,6 +78,9 @@
         },
         "from": "Name <mailer>"
     },
+    "statics": {
+        "version": "19790101"
+    },
     "webapp": {
         "title": "这里是标题",
         "site": {
