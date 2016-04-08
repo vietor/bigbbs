@@ -1,3 +1,4 @@
+var url = require('url');
 var config = require('config');
 var common = require('./common');
 
@@ -69,4 +70,9 @@ exports.node_recent = function(req, res) {
                 });
         });
     });
+};
+
+exports.search = function(req, res) {
+    var hostname = url.parse(config.webapp.site.home_url).hostname;
+    res.redirect("https://www.google.com/search?q=site:" + hostname + encodeURIComponent(' ' + req.param('q', '')));
 };

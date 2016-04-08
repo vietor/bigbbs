@@ -41,6 +41,18 @@
                     ]
                 }
             ]
+        },
+        {
+            "url": "/search",
+            "method": "GET,POST",
+            "processor": "search",
+            "parameters": [
+                {
+                    "name": "q",
+                    "empty": true,
+                    "length_max": 1024
+                }
+            ]
         }
     ]
 }

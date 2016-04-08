@@ -27,6 +27,16 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
+            <form class="navbar-form" action="/search" method="GET">
+              <div class="input-group search-bar">
+                <input class="form-control" name="q" type="text" maxlength="1000" placeholder="搜索本站" />
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="submit">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </button>
+                </span>
+              </div>
+            </form>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {% if not login_user %}
