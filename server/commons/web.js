@@ -3,6 +3,11 @@ var _ = require('underscore');
 var config = require('config');
 
 var search = config.webapp.search || {};
+if (typeof search == 'string') {
+    search = {
+        type: search
+    };
+}
 var search_type = search.type || '';
 var hostname = search.domain || url.parse(config.webapp.site.home_url).hostname;
 
