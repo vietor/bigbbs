@@ -21,7 +21,7 @@
   <div class="panel-body">
     <ul class="list-unstyled">
       {% for link in webapp.friend_links %}
-      <li><a href="{{link.url}}" target="_blank">{{link.name}}</a></li>
+      <li class="friend-link"><a href="{{link.url}}" target="_blank"><span class="name">{{link.name}}</span>&nbsp;&nbsp;<i class="fa fa-caret-right"></i>&nbsp;&nbsp;<span class="title">{{link.title}}</span></a></li>
       {% endfor %}
     </ul>
   </div>
