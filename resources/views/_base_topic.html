@@ -1,16 +1,16 @@
 {% extends '_base_layout.html' %}
 
 {% block cssinit %}
-<link rel="stylesheet" href="/css/bootstrap-markdown.min.css?v={{statics.version}}">
-<link rel="stylesheet" href="/css/highlight-monokai.min.css?v={{statics.version}}">
+<link rel="stylesheet" href="/css/bootstrap-markdown.min.css?v={{webapp.statics.version}}">
+<link rel="stylesheet" href="/css/highlight-monokai.min.css?v={{webapp.statics.version}}">
 {% endblock %}
 
 {% block jsinit %}
-<script src="/js/marked.min.js?v={{statics.version}}"></script>
-<script src="/js/highlight.pack.min.js?v={{statics.version}}"></script>
-<script src="/js/bootstrap-markdown.min.js?v={{statics.version}}"></script>
-<script src="/js/bootstrap-markdown.zh.min.js?v={{statics.version}}"></script>
-<script src="/js/validator.min.js?v={{statics.version}}"></script>
+<script src="/js/marked.min.js?v={{webapp.statics.version}}"></script>
+<script src="/js/highlight.pack.min.js?v={{webapp.statics.version}}"></script>
+<script src="/js/bootstrap-markdown.min.js?v={{webapp.statics.version}}"></script>
+<script src="/js/bootstrap-markdown.zh.min.js?v={{webapp.statics.version}}"></script>
+<script src="/js/validator.min.js?v={{webapp.statics.version}}"></script>
 <script>
     hljs.initHighlightingOnLoad();
 

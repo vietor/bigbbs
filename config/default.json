@@ -78,9 +78,6 @@
         },
         "from": "Name <mailer>"
     },
-    "statics": {
-        "version": "19790101"
-    },
     "webapp": {
         "title": "这里是标题",
         "site": {
@@ -91,6 +88,13 @@
         "search": {
             "type": "google",
             "domain": ""
+        },
+        "statics": {
+            "version": "19790101",
+            "metaes": [{
+                "name": "description",
+                "content": "a smart social web"
+            }]
         },
         "node_trash": {
             "id": -1,

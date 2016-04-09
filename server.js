@@ -2,6 +2,7 @@ var config = require('config');
 var bigcluster = require('bigcluster');
 
 bigcluster(config.cpu, function() {
+    var _ = require('underscore');
     var path = require('path');
     var swig = require('swig'),
         marked = require('marked'),
@@ -69,8 +70,7 @@ bigcluster(config.cpu, function() {
     var swigDefaults = {
         locals: {
             webapp: config.webapp,
-            limits: config.limits,
-            statics: config.statics
+            limits: config.limits
         }
     };
     if (opts.debug)
@@ -97,6 +97,16 @@ bigcluster(config.cpu, function() {
             return Math.floor(distance / 86400) + '天前';
         return tstext(timestamp).substring(0, 10);
     });
+
+    function htmline(obj) {
+        var text = "";
+        _.mapObject(obj, function(val, key) {
+            text += " " + key + "=\"" + val + "\"";
+        });
+        return text;
+    }
+    htmline.safe = true;
+    swig.setFilter('htmline', htmline);
     swig.setFilter('avatar', function(avatar_uri) {
         var raw_url = "";
         if (avatar_uri) {
