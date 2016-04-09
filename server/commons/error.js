@@ -14,6 +14,7 @@ var errors = {
     202009: "找回密码操作过于频繁",
     202010: "账户积分不足",
     202011: "账户状态受限制",
+    202012: "错误的用户邀请码",
     203001: "节点不存在",
     203002: "话题不存在",
     203003: "重复操作太频繁"
@@ -85,6 +86,10 @@ exports.errScoreNotEnouth = function() {
 
 exports.errStatusLimited = function() {
     return new ErrorNode(202011);
+};
+
+exports.errInvitaionCode = function() {
+    return new ErrorNode(202012);
 };
 
 exports.errNotFoundNode = function() {

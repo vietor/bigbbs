@@ -91,10 +91,8 @@
         },
         "statics": {
             "version": "19790101",
-            "metaes": [{
-                "name": "description",
-                "content": "a smart social web"
-            }]
+            "metaes": [],
+            "invitaions": []
         },
         "node_trash": {
             "id": -1,

@@ -44,12 +44,16 @@ exports.user_register = function(req, res) {
 
 exports.user_register_action = function(req, res) {
     validateCaptcha(req, res, function() {
-        brmx.user_register(req.param("username"), req.param("password"), req.param("email"), function(err) {
-            if (err)
-                common.sendAlter(res, err);
-            else
-                res.redirect("/user/login");
-        });
+        var invitaions = config.webapp.statics.invitaions || [];
+        if (invitaions.length > 0 && !_.contains(invitaions, req.param("invitaion", " ")))
+            common.sendAlter(res, brcx.errInvitaionCode());
+        else
+            brmx.user_register(req.param("username"), req.param("password"), req.param("email"), function(err) {
+                if (err)
+                    common.sendAlter(res, err);
+                else
+                    res.redirect("/user/login");
+            });
     });
 };
 

@@ -42,6 +42,14 @@
 	</div>
       </div>
       {% include '_input_captcha.html' %}
+      {% if webapp.statics.invitaions.length > 0 %}
+      <div class="form-group">
+	<label class="col-sm-3 control-label" for="invitaion">邀请密钥</label>
+	<div class="col-sm-5">
+	  <input class="form-control" id="invitaion" name="invitaion" type="text" maxlength="32" required />
+	</div>
+      </div>
+      {% endif %}
       <div class="form-group">
 	<div class="col-sm-offset-4 col-sm-9">
 	  <button type="submit" name="commit" class="btn btn-primary">注册</button>
