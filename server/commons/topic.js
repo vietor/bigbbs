@@ -3,7 +3,12 @@ var config = require('config');
 
 var nodes = [config.webapp.node_trash];
 _.each(config.webapp.node_groups, function(node_group) {
-    nodes = nodes.concat(node_group.nodes);
+    var group = _.omit(node_group, "nodes");
+    nodes = nodes.concat(_.map(node_group.nodes, function(node) {
+        return _.extend({}, node, {
+            group: group
+        });
+    }));
 });
 
 exports.findNode = function(id) {
