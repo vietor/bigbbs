@@ -109,18 +109,21 @@ exports.topic_create = function(user_id, node_id, title, content, callback) {
 exports.topic_edit = function(user_id, topic_id, title, content, callback) {
     async.waterfall([
         function(nextcall) {
-            findAndCheckUser(user_id, 0, function(err, user) {
-                if (err)
-                    nextcall(err);
-                else
-                    nextcall(null, user);
-            });
+            if (config.limits.active_reply)
+                nextcall(brcx.errFeatureAccess());
+            else
+                findAndCheckUser(user_id, 0, function(err) {
+                    if (err)
+                        nextcall(err);
+                    else
+                        nextcall(null);
+                });
         },
-        function(user, nextcall) {
+        function(nextcall) {
             findTopicById(topic_id, function(err, topic) {
                 if (err)
                     nextcall(err);
-                else if (topic.user_id != user._id)
+                else if (topic.user_id != user_id)
                     nextcall(brcx.errContentAccess());
                 else
                     nextcall(null, topic);
