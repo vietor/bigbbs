@@ -85,13 +85,17 @@
             "home_url": "http://127.0.0.1:4000",
             "resetpwd_url": "http://127.0.0.1:4000/user/resetpwd"
         },
+        "meta": {
+            "description": "",
+            "keywords": "",
+            "extends": []
+        },
         "search": {
             "type": "google",
             "domain": ""
         },
         "statics": {
             "version": "19790101",
-            "metaes": [],
             "invitaions": []
         },
         "node_trash": {

@@ -3,10 +3,11 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% for meta in webapp.statics.metaes %}
-    <meta {{meta|htmline}}>
-    {% endfor %}
+    {% if webapp.meta.description %}<meta name="description" content="{{webapp.meta.description}}">{% endif %}
+    {% if webapp.meta.keywords %}<meta name="keywords" content="{{webapp.meta.keywords}}">{% endif %}
+    {% for meta in webapp.meta.extends %}<meta {{meta|htmline}}>{% endfor %}
     <title>{{webapp.title}}</title>
     <link rel="icon" href="/favicon.ico">
     <link rel="stylesheet" href="/css/bootstrap.min.css?v={{webapp.statics.version}}">
