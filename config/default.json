@@ -64,7 +64,7 @@
             "user_create": 150,
             "topic_create": 25,
             "reply_create": 15,
-            "reply_reward": 10
+            "reply_reward": 5
         },
         "avatar_size_kb": 128
     },
