@@ -80,6 +80,35 @@
             }
         },
         {
+            "url": "/topic/edit/:id",
+            "method": "GET",
+            "processor": "topic_edit",
+            "parameters": [],
+            "workparam": {
+                "logined": true
+            }
+        },
+        {
+            "url": "/topic/edit/:id",
+            "method": "POST",
+            "processor": "topic_edit_action",
+            "parameters": [
+                {
+                    "name": "title",
+                    "length_min": 2,
+                    "length_max": 128
+                },
+                {
+                    "name": "content",
+                    "length_min": 2,
+                    "length_max": 1048576
+                }
+            ],
+            "workparam": {
+                "logined": true
+            }
+        },
+        {
             "url": "/topic/reply/create",
             "method": "POST",
             "processor": "reply_create_action",

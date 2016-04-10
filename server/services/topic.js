@@ -26,6 +26,28 @@ exports.topic_create_action = function(req, res) {
     });
 };
 
+exports.topic_edit = function(req, res) {
+    brmx.topic_detail(parseInt(req.param('id')), function(err, topic, user_map) {
+        if (!err && topic.user_id != req.session.login_user.id)
+            err = brcx.errContentAccess();
+        if (err)
+            common.sendAlter(res, err);
+        else
+            res.render('topic_edit.html', {
+                topic: common.dumpTopicDetail(topic, user_map)
+            });
+    });
+};
+
+exports.topic_edit_action = function(req, res) {
+    brmx.topic_edit(req.session.login_user.id, parseInt(req.param('id')), req.param('title'), req.param('content'), function(err, topic_id) {
+        if (err)
+            common.sendAlter(res, err);
+        else
+            res.redirect('/t/' + topic_id);
+    });
+};
+
 exports.topic_move_action = function(req, res) {
     brmx.topic_move(req.session.login_user.id, parseInt(req.param('topic_id')), parseInt(req.param('node_id')), function(err, topic_id) {
         if (err)

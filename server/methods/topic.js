@@ -106,6 +106,50 @@ exports.topic_create = function(user_id, node_id, title, content, callback) {
     ], callback);
 };
 
+exports.topic_edit = function(user_id, topic_id, title, content, callback) {
+    async.waterfall([
+        function(nextcall) {
+            findAndCheckUser(user_id, 0, function(err, user) {
+                if (err)
+                    nextcall(err);
+                else
+                    nextcall(null, user);
+            });
+        },
+        function(user, nextcall) {
+            findTopicById(topic_id, function(err, topic) {
+                if (err)
+                    nextcall(err);
+                else if (topic.user_id != user._id)
+                    nextcall(brcx.errContentAccess());
+                else
+                    nextcall(null, topic);
+            });
+        },
+        function(topic, nextcall) {
+            var update = {};
+            if (topic.title != title)
+                update.title = title;
+            if (topic.content != content)
+                update.content = content;
+            if (_.keys(update).length < 1)
+                nextcall(null, topic_id);
+            else
+                TopicModel.update({
+                    _id: topic_id
+                }, {
+                    $set: update
+                }, function(err) {
+                    if (err)
+                        nextcall(brcx.errDBAccess(err));
+                    else
+                        nextcall(null, topic_id);
+                });
+        }
+    ], callback);
+};
+
+
 exports.topic_list = function(node_id, otype, offset, limit, callback) {
     async.waterfall([
         function(nextcall) {
@@ -307,6 +351,27 @@ exports.reply_create = function(user_id, topic_id, content, callback) {
                     nextcall(err);
                 else
                     nextcall(null, topic_id);
+            });
+        }
+    ], callback);
+};
+
+exports.topic_detail = function(topic_id, callback) {
+    async.waterfall([
+        function(nextcall) {
+            findTopicById(topic_id, function(err, topic) {
+                if (err)
+                    nextcall(err);
+                else
+                    nextcall(null, topic);
+            });
+        },
+        function(topic, nextcall) {
+            brcx.findUsersById([topic.user_id], function(err, user_map) {
+                if (err)
+                    nextcall(null);
+                else
+                    nextcall(null, topic, user_map);
             });
         }
     ], callback);

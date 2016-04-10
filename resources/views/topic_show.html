@@ -16,8 +16,14 @@
     {{topic.content|markdown}}
   </div>
   <div class="panel-footer clearfix">
-    {% if login_user && login_user.role > 0 %}
-    <div class="pull-right manager-options">
+    {% if login_user  %}
+    {% if topic.creator.id == login_user.id %}
+    <span class="manager-options">
+      <a class="btn btn-primary" href="/topic/edit/{{topic.id}}">编辑</a>
+    </span>
+    {% endif %}
+    {% if login_user.role > 0 %}
+    <span class="pull-right manager-options">
       <form accept-charset="UTF-8" action="/topic/move" method="post" data-toggle="validator" role="form">
         <input type="hidden" name="_csrf" value="{{csrf}}"/>
         <input name="topic_id" id="topic_id" type="hidden" value="{{topic.id}}" />
@@ -39,7 +45,8 @@
           </div>
         </div>
       </form>
-    </div>
+    </span>
+    {% endif %}
     {% endif %}
   </div>
 </div>

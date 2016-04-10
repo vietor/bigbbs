@@ -1,0 +1,34 @@
+{% set navbar='topic_create' %}
+
+{% extends '_base_topic.html' %}
+
+{% block body %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">编辑主题</h3>
+  </div>
+  <div class="panel-body">
+    <form accept-charset="UTF-8" action="/topic/edit/{{topic.id}}" id="edit_topic" method="post" data-toggle="validator" role="form">
+      <input type="hidden" name="_csrf" value="{{csrf}}"/>
+      <div class="form-group">
+        <label for="title">标题</label>
+        <input class="form-control" id="topic_title" name="title" type="text" data-minlength="2" maxlength="128" value="{{topic.title}}" required/>
+        <span class="help-block">标题长度需2-128个字符</span>
+      </div>
+      <div class="form-group">
+        <textarea class="form-control" id="post_content" name="content" rows="15" data-provide="markdown" data-language="zh" data-minlength="2" maxlength="1048576" required>{{topic.content}}</textarea>
+	<span class="help-block"></span>
+      </div>
+      <button type="submit" class="btn btn-primary">编辑</button>
+    </form>
+  </div>
+  <div class="panel-footer"></div>
+</div>
+
+{% endblock %}
+
+{% block sidebar %}
+{% include '_sidebar_score.html' %}
+{% include '_sidebar_normal.html' %}
+{% endblock %}
