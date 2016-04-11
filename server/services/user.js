@@ -120,6 +120,7 @@ exports.user_show = function(req, res) {
             common.sendAlter(res, err);
         else
             res.render('user_show.html', {
+                title_stuffix: ' > ' + user.username,
                 current_user: common.dumpUserDetail(user),
                 topic_list: common.dumpTopicList(topics, user_map)
             });

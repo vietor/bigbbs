@@ -73,6 +73,7 @@ exports.topic_show = function(req, res) {
         else {
             var baseindex = brcx.getPageOffset(page, config.limits.reply_pagesize);
             res.render('topic_show.html', {
+                title_prefix: topic.title + ' - ',
                 topic: common.dumpTopicDetail(topic, user_map),
                 reply_list: _.map(replies, function(row, index) {
                     return _.extend(dumpReplyDetail(row, user_map), {

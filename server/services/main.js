@@ -45,11 +45,14 @@ exports.node = function(req, res) {
         brmx.topic_list(node_id, brcx.TOPIC_OTYPE_UPDATE, 0, config.limits.topic_pagesize, function(err, topics, user_map) {
             if (err)
                 common.sendAlter(res, err);
-            else
+            else {
+                var node = brcx.findNode(node_id);
                 res.render('topic_list_node.html', {
-                    current_node: brcx.findNode(node_id),
+                    title_stuffix: ' > ' + node.name,
+                    current_node: node,
                     topic_list: common.dumpTopicList(topics, user_map)
                 });
+            }
         });
     });
 };
@@ -60,13 +63,16 @@ exports.node_recent = function(req, res) {
         brmx.topic_list(node_id, brcx.TOPIC_OTYPE_CREATE, getOffset(page), config.limits.topic_pagesize, function(err, topics, user_map) {
             if (err)
                 common.sendAlter(res, err);
-            else
+            else {
+                var node = brcx.findNode(node_id);
                 res.render('topic_list_node_recent.html', {
-                    current_node: brcx.findNode(node_id),
+                    title_stuffix: ' > ' + node.name,
+                    current_node: node,
                     topic_list: common.dumpTopicList(topics, user_map),
                     page: page,
                     has_next: topics.length >= config.limits.topic_pagesize
                 });
+            }
         });
     });
 };
