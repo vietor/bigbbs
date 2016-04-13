@@ -117,6 +117,8 @@
 
 
 {% block sidebar %}
+{% if login_user %}
 {% include '_sidebar_score.html' %}
+{% endif %}
 {% include '_sidebar_normal.html' %}
 {% endblock %}
