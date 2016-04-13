@@ -110,7 +110,12 @@ gulp.task('watch', ['service'], function() {
     gulp.watch(paths.js + '/*.js', ['js']);
     gulp.watch(paths.sass + '/*.scss', ['css']);
     gulp.watch(paths.direct + '/**', ['direct']);
-    gulp.watch(['./server.js', './server/**/*.js', './server/**/*.json'], ['service']);
+    gulp.watch([
+        './server.js',
+        './server/**/*.js',
+        './server/**/*.json',
+        './config/*.json'
+    ], ['service']);
 });
 
 gulp.task('zip', ['bower-copy', 'direct', 'css'], function() {
