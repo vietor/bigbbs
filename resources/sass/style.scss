@@ -66,13 +66,20 @@ body {
         padding-top: 18px;
     }
 
-    .panel-title {
+    .text-muted {
+        font-size: 12px;
+    }
+
+    h1 {
         font-size: 22px;
         margin: 5px 0;
     }
+}
 
-    .text-muted {
-        font-size: 12px;
+.user-detail-heading {
+    h1 {
+        font-size: 18px;
+        margin: 10px 0;
     }
 }
 

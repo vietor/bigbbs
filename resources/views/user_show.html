@@ -1,12 +1,12 @@
 {% extends '_base_layout.html' %} {% block body %}
 
 <div class="panel">
-  <div class="panel-body">
+  <div class="panel-body user-detail-heading">
     <div class="col-xs-3 hidden-xs">
       <img class="img-rounded avatar-large" src="{{current_user.avatar|avatar}}" alt="avatar">
     </div>
     <div class="col-xs-9">
-      <h4>{{current_user.username}}</h4>
+      <h1>{{current_user.username}}</h1>
       <p class="text-muted">加入于:&nbsp;{{current_user.create_date|tsbeforetext}}</p>
       <p class="text-muted">现状态:&nbsp;{{current_user.status|kvmap(['正常','禁用'])}}{% if current_user.status %}, 于{{current_user.status_date|tsbeforetext}}{% endif %}</p>
       <p><span class="label label-info">个人主页:</span>&nbsp;&nbsp;<a href="{{current_user.homepage}}" target="_blank">{{current_user.homepage}}</a></p>
