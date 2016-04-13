@@ -20,6 +20,7 @@ bigcluster(config.cpu, function() {
     var static_options = {};
     if (!config.debug)
         static_options = {
+            etag: false,
             maxAge: '14d',
         };
     var statics = [{
