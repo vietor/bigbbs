@@ -43,6 +43,10 @@ body {
     word-break: normal;
 }
 
+.panel-footer {
+    background-color: #fff;
+}
+
 .badge-success {
     a {
         color:white
@@ -60,8 +64,6 @@ body {
 }
 
 .topic-detail-heading {
-    background-color: #fff;
-
     .pull-right {
         padding-top: 18px;
     }
