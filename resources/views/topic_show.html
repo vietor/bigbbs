@@ -52,7 +52,7 @@
   </div>
 </div>
 {% if limits.active_reply %}
-<div class="panel panel-default">
+<div class="panel">
   <div class="panel-heading">
     <h5 class="panel-title">
       {% if topic.reply_count > 0 %}
@@ -79,7 +79,7 @@
       {% endfor %}
   </div>
   {% if page_count > 1 %}
-  <div class="panel-footer panel-default">
+  <div class="panel-footer">
     <ul class="pagination" style="margin: 0px;">
       {% for i in page_count|prange %}
       <li {% if i == page %} class="active" {% endif %}><a href="/t/{{topic.id}}?page={{i}}">{{i}}</a></li>
@@ -88,7 +88,7 @@
   </div>
   {% endif %}
 </div>
-<div class="panel panel-default" id="reply_create">
+<div class="panel" id="reply_create">
   <div class="panel-heading">
     <h4 class="panel-title">回复</h4>
   </div>
@@ -105,11 +105,10 @@
         <textarea class="form-control" id="post_content" name="content" rows="5" data-provide="markdown" data-language="zh" data-minlength="2" maxlength="1048576" required></textarea>
 	<span class="help-block"></span>
       </div>
-      <button type="submit" class="btn btn-primary" id="comment-submit">回复</button>
+      <button type="submit" class="btn btn-primary" id="comment-submit">回复</button><span class="pull-right text-muted">请尽量让的回复有助于他人</span>
     </form>
     {% endif %}
   </div>
-  <div class="panel-footer"></div>
 </div>
 {% endif %}
 
