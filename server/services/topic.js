@@ -40,7 +40,8 @@ exports.topic_edit = function(req, res) {
 };
 
 exports.topic_edit_action = function(req, res) {
-    brmx.topic_edit(req.session.login_user.id, parseInt(req.param('id')), req.param('title'), req.param('content'), function(err, topic_id) {
+    var topic_id = parseInt(req.param('id'));
+    brmx.topic_edit(req.session.login_user.id, topic_id, req.param('title'), req.param('content'), function(err) {
         if (err)
             common.sendAlter(res, err);
         else
@@ -49,7 +50,8 @@ exports.topic_edit_action = function(req, res) {
 };
 
 exports.topic_move_action = function(req, res) {
-    brmx.topic_move(req.session.login_user.id, parseInt(req.param('topic_id')), parseInt(req.param('node_id')), function(err, topic_id) {
+    var topic_id = parseInt(req.param('topic_id'));
+    brmx.topic_move(req.session.login_user.id, topic_id, parseInt(req.param('node_id')), function(err) {
         if (err)
             common.sendAlter(res, err);
         else
@@ -58,7 +60,8 @@ exports.topic_move_action = function(req, res) {
 };
 
 exports.reply_create_action = function(req, res) {
-    brmx.reply_create(req.session.login_user.id, parseInt(req.param('topic_id')), req.param('content'), function(err, topic_id) {
+    var topic_id = parseInt(req.param('topic_id'));
+    brmx.reply_create(req.session.login_user.id, topic_id, req.param('content'), function(err) {
         if (err)
             common.sendAlter(res, err);
         else

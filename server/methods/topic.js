@@ -136,7 +136,7 @@ exports.topic_edit = function(user_id, topic_id, title, content, callback) {
             if (topic.content != content)
                 update.content = content;
             if (_.keys(update).length < 1)
-                nextcall(null, topic_id);
+                nextcall(null);
             else
                 TopicModel.update({
                     _id: topic_id
@@ -146,7 +146,7 @@ exports.topic_edit = function(user_id, topic_id, title, content, callback) {
                     if (err)
                         nextcall(brcx.errDBAccess(err));
                     else
-                        nextcall(null, topic_id);
+                        nextcall(null);
                 });
         }
     ], callback);
@@ -206,7 +206,7 @@ exports.topic_list = function(node_id, otype, offset, limit, callback) {
                         user_ids.push(row.update_user_id);
                     }
                 });
-                brcx.findUsersById(_.uniq(user_ids), function(err, user_map) {
+                brcx.findUsersById(user_ids, function(err, user_map) {
                     if (err)
                         nextcall(brcx.errDBAccess(err));
                     else
@@ -236,7 +236,7 @@ exports.topic_move = function(user_id, topic_id, node_id, callback) {
         },
         function(topic, nextcall) {
             if (topic.node_id == node_id)
-                nextcall(null, topic_id);
+                nextcall(null);
             else
                 TopicModel.update({
                     _id: topic_id
@@ -246,7 +246,7 @@ exports.topic_move = function(user_id, topic_id, node_id, callback) {
                     if (err)
                         nextcall(brcx.errDBAccess(err));
                     else
-                        nextcall(null, topic_id);
+                        nextcall(null);
                 });
         }
     ], callback);
@@ -353,7 +353,7 @@ exports.reply_create = function(user_id, topic_id, content, callback) {
                 if (err)
                     nextcall(err);
                 else
-                    nextcall(null, topic_id);
+                    nextcall(null);
             });
         }
     ], callback);
@@ -414,7 +414,7 @@ exports.topic_show = function(topic_id, page, pagesize, callback) {
             _.each(replies, function(row) {
                 user_ids.push(row.user_id);
             });
-            brcx.findUsersById(_.uniq(user_ids), function(err, user_map) {
+            brcx.findUsersById(user_ids, function(err, user_map) {
                 if (err)
                     nextcall(null);
                 else
@@ -466,7 +466,7 @@ exports.user_topic_list = function(username, offset, limit, callback) {
                         user_ids.push(row.update_user_id);
                     }
                 });
-                brcx.findUsersById(_.uniq(user_ids), function(err, user_map) {
+                brcx.findUsersById(user_ids, function(err, user_map) {
                     if (err)
                         nextcall(err);
                     else {

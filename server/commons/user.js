@@ -73,18 +73,23 @@ exports.findUsersById = function(user_ids, callback, options) {
         callback(null, {});
     else {
         var projection = null;
-        if (!options.fully)
+        if (!options.fully) {
             projection = {
                 _id: 1,
                 username: 1,
                 avatar: 1,
                 role: 1
             };
-        UserModel.find({
-            _id: {
+        }
+        user_ids = _.uniq(user_ids);
+        var match = {};
+        if (user_ids.length == 1)
+            match._id = user_ids[0];
+        else
+            match._id = {
                 $in: user_ids
-            }
-        }, projection, function(err, rows) {
+            };
+        UserModel.find(match, projection, function(err, rows) {
             if (err)
                 callback(brcx.errDBAccess(err));
             else {
