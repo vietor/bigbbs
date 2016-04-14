@@ -10,9 +10,9 @@
     {% for meta in webapp.meta.extends %}<meta {{meta|htmline}}>{% endfor %}
     <title>{{title_prefix}}{{webapp.title}}{{title_stuffix}}</title>
     <link rel="icon" href="/favicon.ico">
-    <link rel="stylesheet" href="/css/bootstrap.min.css?v={{webapp.statics.version}}">
-    <link rel="stylesheet" href="/css/bootstrap-theme.min.css?v={{webapp.statics.version}}">
-    <link rel="stylesheet" href="/css/font-awesome.min.css?v={{webapp.statics.version}}">
+    <link rel="stylesheet" href="{{webapp.statics.css.bootstrap|default('/css/bootstrap.min.css?v='+webapp.statics.version)}}">
+    <link rel="stylesheet" href="{{webapp.statics.css.bootstrap_theme|default('/css/bootstrap-theme.min.css?v='+webapp.statics.version)}}">
+    <link rel="stylesheet" href="{{webapp.statics.css.font_awesome|default('/css/font-awesome.min.css?v='+webapp.statics.version)}}">
     {% block cssinit %}{% endblock %}
     <link rel="stylesheet" href="/css/style.min.css?v={{webapp.statics.version}}">
   </head>
@@ -90,8 +90,8 @@
       </div>
     </footer>
 
-    <script src="/js/jquery.min.js?v={{webapp.statics.version}}"></script>
-    <script src="/js/bootstrap.min.js?v={{webapp.statics.version}}"></script>
+    <script src="{{webapp.statics.js.jquery|default('/js/jquery.min.js?v='+webapp.statics.version)}}"></script>
+    <script src="{{webapp.statics.js.bootstrap|default('/js/bootstrap.min.js?v='+webapp.statics.version)}}"></script>
     {% block jsinit %}{% endblock %}
     {% if webapp.statics.analytics_ga %}
     <script>
