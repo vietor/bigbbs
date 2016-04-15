@@ -34,6 +34,9 @@ gulp.task('bower-copy', ['bower'], function() {
         .pipe(gulp.dest(paths.static + '/fonts'));
 
     gulp.src(paths.bower + '/bootstrap-validator/dist/*.min.js')
+        .pipe(rename({
+            prefix: 'bootstrap-',
+        }))
         .pipe(gulp.dest(paths.static + '/js'));
 
     gulp.src(paths.bower + '/font-awesome/css/*.min.css*')
@@ -61,7 +64,7 @@ gulp.task('bower-copy', ['bower'], function() {
 
     gulp.src(paths.bower + '/highlightjs/highlight.pack.min.js')
         .pipe(gulp.dest(paths.static + '/js'));
-    gulp.src(paths.bower + '/highlightjs/styles/monokai.css')
+    gulp.src(paths.bower + '/highlightjs/styles/tomorrow.css')
         .pipe(minify())
         .pipe(rename({
             prefix: 'highlight-',
