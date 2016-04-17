@@ -7,7 +7,7 @@
     <p><span class="text-muted">{{node_group.name}}</span></p>
     <p>
       {% for node in node_group.nodes %}
-      <a href="/go/{{node.code}}">{{node.name}}</a>&nbsp;
+      <a class="node-link btn" href="/go/{{node.code}}">{{node.name}}</a>
       {% endfor %}
     </p>
     {% endfor %}
