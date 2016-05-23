@@ -33,6 +33,18 @@ body {
     }
 }
 
+.layout-main {
+    padding: 0px 5px;
+}
+
+.layout-side {
+    padding: 0px 5px;
+}
+
+.panel {
+    margin-bottom: 8px;
+}
+
 .panel-heading {
     font-size: 18px;
     border-bottom: 1px solid #eee;
@@ -94,6 +106,11 @@ body {
     }
     ul {
         padding: 0 18px;
+    }
+    pre {
+        code {
+            white-space: pre;
+        }
     }
 }
 

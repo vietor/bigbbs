@@ -69,11 +69,11 @@
     <div class="container">
       <div class="row">
         {% block container %}
-        <div class="col-md-8">
+        <div class="col-md-8 layout-main">
           {% block body %}
           {% endblock %}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 layout-side">
           {% block sidebar %}
           {% include "_sidebar_normal.html" %}
           {% endblock %}
@@ -85,7 +85,7 @@
     <footer class="footer navbar-default">
       <div class="container">
         <div class="row">
-          <p class="text-muted">Copyright &#9400; {{webapp.site.name}} All rights reserved. </p>
+          <p class="text-muted">Copyright &#9400;  {{webapp.site.name}}  All rights reserved. </p>
         </div>
       </div>
     </footer>
