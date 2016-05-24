@@ -95,7 +95,8 @@
             "domain": ""
         },
         "statics": {
-            "version": "19790101",
+            "library": "base",
+            "dynamic": "19790101",
             "invitaions": [],
             "js": {},
             "css": {}

@@ -1,16 +1,16 @@
 {% extends '_base_layout.html' %}
 
 {% block cssinit %}
-<link rel="stylesheet" href="{{webapp.statics.css.highlight_style|default('/css/highlight-tomorrow.min.css?v='+webapp.statics.version)}}">
-<link rel="stylesheet" href="{{webapp.statics.css.bootstrap_markdown|default('/css/bootstrap-markdown.min.css?v='+webapp.statics.version)}}">
+<link rel="stylesheet" href="{{webapp.statics.css.highlight_style|default('/static/library/' + webapp.statics.library + '/css/highlight-tomorrow.min.css')}}">
+<link rel="stylesheet" href="{{webapp.statics.css.bootstrap_markdown|default('/static/library/' + webapp.statics.library + '/css/bootstrap-markdown.min.css')}}">
 {% endblock %}
 
 {% block jsinit %}
-<script src="{{webapp.statics.js.highlight_pack|default('/js/highlight.pack.min.js?v='+webapp.statics.version)}}"></script>
-<script src="{{webapp.statics.js.marked|default('/js/marked.min.js?v='+webapp.statics.version)}}"></script>
-<script src="{{webapp.statics.js.bootstrap_markdown|default('/js/bootstrap-markdown.min.js?v='+webapp.statics.version)}}"></script>
-<script src="/js/bootstrap-markdown.zh.min.js?v={{webapp.statics.version}}"></script>
-<script src="{{webapp.statics.js.bootstrap_validator|default('/js/bootstrap-validator.min.js?v='+webapp.statics.version)}}"></script>
+<script src="{{webapp.statics.js.highlight_pack|default('/static/library/' + webapp.statics.library + '/js/highlight.pack.min.js')}}"></script>
+<script src="{{webapp.statics.js.marked|default('/static/library/' + webapp.statics.library + '/js/marked.min.js')}}"></script>
+<script src="{{webapp.statics.js.bootstrap_markdown|default('/static/library/' + webapp.statics.library + '/js/bootstrap-markdown.min.js')}}"></script>
+<script src="/static/library/{{webapp.statics.library}}/js/bootstrap-markdown.zh.min.js"></script>
+<script src="{{webapp.statics.js.bootstrap_validator|default('/static/library/' + webapp.statics.library + '/js/bootstrap-validator.min.js')}}"></script>
 <script>
   hljs.initHighlightingOnLoad();
 

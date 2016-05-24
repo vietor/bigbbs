@@ -10,10 +10,12 @@ var gulp = require('gulp'),
 
 var paths = {
     bower: './bower_components',
-    static: './webroot',
     js: './resources/js',
     sass: './resources/sass',
     direct: './resources/direct',
+    static_webroot: './static/webroot',
+    static_dynamic: './static/dynamic',
+    static_library: './static/library'
 };
 
 gulp.task('bower', function() {
@@ -24,58 +26,58 @@ gulp.task('bower', function() {
 gulp.task('bower-copy', ['bower'], function() {
 
     gulp.src(paths.bower + '/jquery/jquery.min.*')
-        .pipe(gulp.dest(paths.static + '/js'));
+        .pipe(gulp.dest(paths.static_library + '/js'));
 
     gulp.src(paths.bower + '/bootstrap/dist/css/*.min.css*')
-        .pipe(gulp.dest(paths.static + '/css'));
+        .pipe(gulp.dest(paths.static_library + '/css'));
     gulp.src(paths.bower + '/bootstrap/dist/js/*.min.js')
-        .pipe(gulp.dest(paths.static + '/js'));
+        .pipe(gulp.dest(paths.static_library + '/js'));
     gulp.src(paths.bower + '/bootstrap/dist/fonts/*.*')
-        .pipe(gulp.dest(paths.static + '/fonts'));
+        .pipe(gulp.dest(paths.static_library + '/fonts'));
 
     gulp.src(paths.bower + '/bootstrap-validator/dist/*.min.js')
         .pipe(rename({
             prefix: 'bootstrap-',
         }))
-        .pipe(gulp.dest(paths.static + '/js'));
+        .pipe(gulp.dest(paths.static_library + '/js'));
 
     gulp.src(paths.bower + '/font-awesome/css/*.min.css*')
-        .pipe(gulp.dest(paths.static + '/css'));
+        .pipe(gulp.dest(paths.static_library + '/css'));
     gulp.src(paths.bower + '/font-awesome/fonts/*.*')
-        .pipe(gulp.dest(paths.static + '/fonts'));
+        .pipe(gulp.dest(paths.static_library + '/fonts'));
 
     gulp.src(paths.bower + '/bootstrap-markdown/css/*.min.css*')
-        .pipe(gulp.dest(paths.static + '/css'));
+        .pipe(gulp.dest(paths.static_library + '/css'));
     gulp.src(paths.bower + '/bootstrap-markdown/js/*.js')
         .pipe(uglify())
         .pipe(rename({
             suffix: '.min'
         }))
-        .pipe(gulp.dest(paths.static + '/js'));
+        .pipe(gulp.dest(paths.static_library + '/js'));
     gulp.src(paths.bower + '/bootstrap-markdown/locale/bootstrap-markdown.zh.js')
         .pipe(uglify())
         .pipe(rename({
             suffix: '.min'
         }))
-        .pipe(gulp.dest(paths.static + '/js'));
+        .pipe(gulp.dest(paths.static_library + '/js'));
 
     gulp.src(paths.bower + '/marked/marked.min.js')
-        .pipe(gulp.dest(paths.static + '/js'));
+        .pipe(gulp.dest(paths.static_library + '/js'));
 
     gulp.src(paths.bower + '/highlightjs/highlight.pack.min.js')
-        .pipe(gulp.dest(paths.static + '/js'));
+        .pipe(gulp.dest(paths.static_library + '/js'));
     gulp.src(paths.bower + '/highlightjs/styles/tomorrow.css')
         .pipe(minify())
         .pipe(rename({
             prefix: 'highlight-',
             suffix: '.min'
         }))
-        .pipe(gulp.dest(paths.static + '/css'));
+        .pipe(gulp.dest(paths.static_library + '/css'));
 });
 
 gulp.task('direct', function() {
     gulp.src(paths.direct + '/**')
-        .pipe(gulp.dest(paths.static));
+        .pipe(gulp.dest(paths.static_webroot));
 });
 
 gulp.task('js', function() {
@@ -84,7 +86,7 @@ gulp.task('js', function() {
         .pipe(rename({
             suffix: '.min'
         }))
-        .pipe(gulp.dest(paths.static + '/js'));
+        .pipe(gulp.dest(paths.static_dynamic + '/js'));
 });
 
 gulp.task('css', function() {
@@ -95,7 +97,7 @@ gulp.task('css', function() {
         .pipe(rename({
             suffix: '.min'
         }))
-        .pipe(gulp.dest(paths.static + '/css'));
+        .pipe(gulp.dest(paths.static_dynamic + '/css'));
 });
 
 gulp.task('service', ['bower-copy'], function() {
@@ -128,7 +130,7 @@ gulp.task('zip', ['bower-copy', 'direct', 'css'], function() {
             './server/**',
             './resources/mail/**',
             './resources/views/**',
-            './webroot/**',
+            './static/**',
             './config/**', '!./config/local.json'
         ], {
             base: '.'

@@ -10,11 +10,11 @@
     {% for meta in webapp.meta.extends %}<meta {{meta|htmline}}>{% endfor %}
     <title>{{title_prefix}}{{webapp.title}}{{title_stuffix}}</title>
     <link rel="icon" href="/favicon.ico">
-    <link rel="stylesheet" href="{{webapp.statics.css.bootstrap|default('/css/bootstrap.min.css?v='+webapp.statics.version)}}">
-    <link rel="stylesheet" href="{{webapp.statics.css.bootstrap_theme|default('/css/bootstrap-theme.min.css?v='+webapp.statics.version)}}">
-    <link rel="stylesheet" href="{{webapp.statics.css.font_awesome|default('/css/font-awesome.min.css?v='+webapp.statics.version)}}">
+    <link rel="stylesheet" href="{{webapp.statics.css.bootstrap|default('/static/library/' + webapp.statics.library + '/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{webapp.statics.css.bootstrap_theme|default('/static/library/' + webapp.statics.library + '/css/bootstrap-theme.min.css')}}">
+    <link rel="stylesheet" href="{{webapp.statics.css.font_awesome|default('/static/library/' + webapp.statics.library + '/css/font-awesome.min.css')}}">
     {% block cssinit %}{% endblock %}
-    <link rel="stylesheet" href="/css/style.min.css?v={{webapp.statics.version}}">
+    <link rel="stylesheet" href="/static/dynamic/{{webapp.statics.dynamic}}/css/style.min.css">
   </head>
   <body>
     <nav class="navbar navbar-default navbar-fixed-top">
@@ -90,8 +90,8 @@
       </div>
     </footer>
 
-    <script src="{{webapp.statics.js.jquery|default('/js/jquery.min.js?v='+webapp.statics.version)}}"></script>
-    <script src="{{webapp.statics.js.bootstrap|default('/js/bootstrap.min.js?v='+webapp.statics.version)}}"></script>
+    <script src="{{webapp.statics.js.jquery|default('/static/library/' + webapp.statics.library + '/js/jquery.min.js')}}"></script>
+    <script src="{{webapp.statics.js.bootstrap|default('/static/library/' + webapp.statics.library + '/js/bootstrap.min.js')}}"></script>
     {% block jsinit %}{% endblock %}
     {% if webapp.statics.analytics_ga %}
     <script>

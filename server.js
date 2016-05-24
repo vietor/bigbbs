@@ -24,8 +24,16 @@ bigcluster(config.cpu, function() {
             maxAge: '14d',
         };
     var statics = [{
+        urlpath: '/static/library/' + config.webapp.statics.library + '/',
+        filepath: path.join(__dirname, "static", "library"),
+        options: static_options
+    }, {
+        urlpath: '/static/dynamic/' + config.webapp.statics.dynamic + '/',
+        filepath: path.join(__dirname, "static", "dynamic"),
+        options: static_options
+    }, {
         urlpath: '/',
-        filepath: path.join(__dirname, "webroot"),
+        filepath: path.join(__dirname, "static", "webroot"),
         options: static_options
     }];
     if (avatar.type == 'localfs') {
