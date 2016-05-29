@@ -23,12 +23,18 @@ bigcluster(config.cpu, function() {
             etag: false,
             maxAge: '14d',
         };
+
+    var assets = {
+        library: '/assets/l/' + config.webapp.versions.library,
+        dynamic: '/assets/d/' + config.webapp.versions.dynamic,
+    };
+
     var statics = [{
-        urlpath: '/assets/l/' + config.webapp.versions.library + '/',
+        urlpath: assets.library + '/',
         filepath: path.join(__dirname, "static", "library"),
         options: static_options
     }, {
-        urlpath: '/assets/d/' + config.webapp.versions.dynamic + '/',
+        urlpath: assets.dynamic + '/',
         filepath: path.join(__dirname, "static", "dynamic"),
         options: static_options
     }, {
@@ -82,6 +88,8 @@ bigcluster(config.cpu, function() {
             limits: config.limits
         }
     };
+    _.extend(swigDefaults.locals.webapp.statics, assets);
+
     if (opts.debug)
         swigDefaults.cache = false;
     swig.setDefaults(swigDefaults);
