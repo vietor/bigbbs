@@ -24,11 +24,11 @@ bigcluster(config.cpu, function() {
             maxAge: '14d',
         };
     var statics = [{
-        urlpath: '/static/library/' + config.webapp.statics.library + '/',
+        urlpath: '/assets/l/' + config.webapp.versions.library + '/',
         filepath: path.join(__dirname, "static", "library"),
         options: static_options
     }, {
-        urlpath: '/static/dynamic/' + config.webapp.statics.dynamic + '/',
+        urlpath: '/assets/d/' + config.webapp.versions.dynamic + '/',
         filepath: path.join(__dirname, "static", "dynamic"),
         options: static_options
     }, {

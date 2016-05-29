@@ -94,9 +94,11 @@
             "type": "google",
             "domain": ""
         },
+        "versions": {
+            "library": "0",
+            "dynamic": "0"
+        },
         "statics": {
-            "library": "base",
-            "dynamic": "19790101",
             "invitaions": [],
             "js": {},
             "css": {}

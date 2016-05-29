@@ -2,7 +2,7 @@
 {% extends '_base_layout.html' %}
 
 {% block jsinit %}
-<script src="{{webapp.statics.js.bootstrap_validator|default('/static/library/' + webapp.statics.library + '/js/bootstrap-validator.min.js')}}"></script>
+<script src="{{webapp.statics.js.bootstrap_validator|default('/assets/l/' + webapp.versions.library + '/js/bootstrap-validator.min.js')}}"></script>
 {% endblock %}
 
 {% block body %}
