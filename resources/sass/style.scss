@@ -1,7 +1,3 @@
-* {
-    padding: 0;
-    margin: 0;
-}
 
 html {
     position: relative;
@@ -33,14 +29,6 @@ body {
     }
 }
 
-.layout-main {
-    padding: 0px 5px;
-}
-
-.layout-side {
-    padding: 0px 5px;
-}
-
 .panel {
     margin-bottom: 8px;
 }
@@ -63,6 +51,29 @@ body {
     a {
         color:white
     }
+}
+
+.media-list {
+    li {
+        border-bottom: 1px solid #eee;
+    }
+
+    .media-heading {
+        a {
+            font-size: 16px;
+            color: #444;
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////
+
+.layout-main {
+    padding: 0px 5px;
+}
+
+.layout-side {
+    padding: 0px 5px;
 }
 
 .avatar-small {
@@ -110,19 +121,6 @@ body {
     pre {
         code {
             white-space: pre;
-        }
-    }
-}
-
-.media-list {
-    li {
-        border-bottom: 1px solid #eee;
-    }
-
-    .media-heading {
-        a {
-            font-size: 16px;
-            color: #444;
         }
     }
 }
